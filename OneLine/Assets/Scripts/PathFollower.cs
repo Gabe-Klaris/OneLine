@@ -74,12 +74,12 @@ public class PathFollower : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         DrawLine();
         
         // go forward direction
-        if ((Input.GetKeyDown(KeyCode.RightArrow)) || (Input.GetKeyDown(KeyCode.D))) {
+        if ((Input.GetKey(KeyCode.RightArrow)) || (Input.GetKey(KeyCode.D))) {
             // pos is incrimented here
             pos += MoveSpeed;
             // checks if not at next node
@@ -101,7 +101,7 @@ public class PathFollower : MonoBehaviour
         }
 
         // go back direction (same as above but in reverse direction)
-        if ((Input.GetKeyDown(KeyCode.LeftArrow)) || (Input.GetKeyDown(KeyCode.A))) {
+        if ((Input.GetKey(KeyCode.LeftArrow)) || (Input.GetKey(KeyCode.A))) {
             pos -= MoveSpeed;
             if (player.transform.position != startPosition) {
                 Debug.Log("Moving");
