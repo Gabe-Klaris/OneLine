@@ -23,7 +23,7 @@ public class GameHandler : MonoBehaviour
 
     public void StartGame()
     {
-        // SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("LineMove");
     }
 
     public void Credits()
