@@ -8,7 +8,7 @@ public class PathFollower : MonoBehaviour
     public GameObject player;
     public float MoveSpeed;
 
-    int CurrentNode;
+    int CurrentNode = 0;
 
     float pos;
 
@@ -19,17 +19,19 @@ public class PathFollower : MonoBehaviour
 
     float previous;
 
+    float moveRadius = 2;
+
     Vector3 startPosition;
     // Start is called before the first frame update
     void Start()
     {
         PathNode = GetComponentsInChildren<Node>();
         CheckNode();
-
+        player.transform.position = PathNode[0].transform.position;
         // Code for setting line renderer for line view (copied from Unity Documentation)
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        lineRenderer.widthMultiplier = 0.05f;
+        lineRenderer.widthMultiplier = 0.08f;
         lineRenderer.positionCount = PathNode.Length;
 
         // A simple 2 color gradient with a fixed alpha of 1.0f.
@@ -43,23 +45,104 @@ public class PathFollower : MonoBehaviour
     }
 
     // sets start and end pos for linear transform
-    void CheckNode() {
-        if (CurrentNode < PathNode.Length) {
-            // used for backtracking
+    public void CheckNode() {
+        if (CurrentNode < PathNode.Length - 1) {
             previous = pos;
             pos = 0;
-            CurrentPositionHolder = PathNode[CurrentNode].transform.position;
-            startPosition = player.transform.position;
+            CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
+            startPosition = PathNode[CurrentNode].transform.position;
 
         }
     }
 
+    public void updateall() {
+        for (int i = 0; i < PathNode.Length; i++) {
+            Node node = PathNode[i].GetComponent<Node>();
+            node.simulateDrag();
+        }
+    }
+
+    public Vector3 checkDrag(Node node) {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = Camera.main.transform.position.z + Camera.main.nearClipPlane;
+        player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
+        
+        int index = 0;
+        for (int i = 0; i < PathNode.Length; i++) {
+            Node node1 = PathNode[i].GetComponent<Node>();
+            if (node == node1) {
+                index = i;
+                i = PathNode.Length;
+            }
+        }
+
+        if (index == CurrentNode || index == CurrentNode + 1) {
+            movePlayer();
+        }
+        Debug.Log(index);
+
+        Vector3 prevNode = new Vector3(0, 0, 0);
+        if (index == 0 || index == PathNode.Length - 1) {
+            if (index == 0) {
+                prevNode = PathNode[index + 1].transform.position;
+            }
+            else if (index == PathNode.Length -1) {
+                prevNode = PathNode[index - 1].transform.position;
+            }
+            float dist = Vector3.Distance(mousePos, prevNode);
+            Vector3 vdist = mousePos - prevNode;
+            if (dist < moveRadius) {
+                return mousePos;
+            }
+            else {
+                Debug.Log(OnePointNormalize(vdist));
+                Debug.Log(prevNode);
+                return prevNode + OnePointNormalize(vdist);
+            }
+        }
+        else {
+            Vector3 posNode = PathNode[index + 1].transform.position;
+            prevNode = PathNode[index - 1].transform.position;
+
+            float posDist = Vector3.Distance(mousePos, posNode);
+            float prevDist = Vector3.Distance(mousePos, prevNode);
+
+            if (prevDist < moveRadius && posDist < moveRadius) {
+                return mousePos;
+            }
+            else if (prevDist >= moveRadius && posDist < moveRadius) {
+                Vector3 vdist = mousePos - prevNode;
+                return prevNode + OnePointNormalize(vdist);
+            }
+            else if (prevDist < moveRadius && posDist >= moveRadius) {
+                Vector3 vdist = mousePos - posNode;
+                return posNode + OnePointNormalize(vdist);
+            }
+            else {
+                return node.transform.position;
+            }
+        }
+        
+    }
+
+    Vector3 OnePointNormalize(Vector3 dist) {
+        Vector3 newPos = dist.normalized;
+        return newPos * moveRadius;
+    }
+
+    void movePlayer() {
+        CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
+        Debug.Log(CurrentNode);
+        startPosition = PathNode[CurrentNode].transform.position;
+        player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
+    }
+
     void backNode() {
-        if (CurrentNode > 0) {
+        if (CurrentNode >= 0) {
             pos = previous;
-            CurrentPositionHolder = player.transform.position;
-            Debug.Log(CurrentNode - 1);
-            startPosition = PathNode[CurrentNode -1].transform.position;
+            CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
+            Debug.Log(CurrentNode);
+            startPosition = PathNode[CurrentNode].transform.position;
         }
     }
 
@@ -77,7 +160,6 @@ public class PathFollower : MonoBehaviour
     void FixedUpdate()
     {
         DrawLine();
-        
         // go forward direction
         if ((Input.GetKey(KeyCode.RightArrow)) || (Input.GetKey(KeyCode.D))) {
             // pos is incrimented here
@@ -90,7 +172,7 @@ public class PathFollower : MonoBehaviour
             } 
             else {
                 // here means hit next node
-                if (CurrentNode < PathNode.Length) {
+                if (CurrentNode < PathNode.Length - 1) {
                     CurrentNode++;
                     CheckNode();
                     Debug.Log("Movin1g");
