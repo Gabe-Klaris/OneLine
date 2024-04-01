@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7159770229825728722}
   - component: {fileID: 3477260199130238695}
+  - component: {fileID: 1882378372489570213}
   m_Layer: 0
   m_Name: GameHandler
   m_TagString: GameController
@@ -30,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3477260199130238695
 MonoBehaviour:
@@ -44,3 +45,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501b5c3837e5eba4689a77f2226b5141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1882378372489570213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3665127404227142942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d020c752a8336a4c874c68d1060687f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenuUI: {fileID: 8826265094898888934, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
+  mixer: {fileID: 24100000, guid: 29128a06a6fb3054fac55c5955606ccd, type: 2}
