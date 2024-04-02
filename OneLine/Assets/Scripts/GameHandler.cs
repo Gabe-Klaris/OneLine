@@ -8,6 +8,7 @@ public class GameHandler : MonoBehaviour
 {
     private GameObject player;
     private string sceneName;
+    public AudioSource StartGameSFX;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +24,7 @@ public class GameHandler : MonoBehaviour
 
     public void StartGame()
     {
+        StartGameSFX.Play();
         SceneManager.LoadScene("LineMove");
     }
 
