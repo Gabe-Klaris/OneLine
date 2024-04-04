@@ -10,7 +10,7 @@ public class Node : MonoBehaviour
 
     private GameObject path;
 
-    private PathFollower pathFuns;
+    private Path pathFuns;
 
     
     // Start is called before the first frame update
@@ -19,7 +19,7 @@ public class Node : MonoBehaviour
         rend = GetComponent<Renderer>();
         rend.enabled = false;
         path = GameObject.FindGameObjectWithTag("Path");
-        pathFuns = path.GetComponent<PathFollower>();
+        pathFuns = path.GetComponent<Path>();
         
     }
 

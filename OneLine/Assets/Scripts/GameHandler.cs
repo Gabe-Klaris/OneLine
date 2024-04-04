@@ -25,7 +25,7 @@ public class GameHandler : MonoBehaviour
     public void StartGame()
     {
         StartGameSFX.Play();
-        SceneManager.LoadScene("LineMove");
+        SceneManager.LoadScene("Level_One");
     }
 
     public void Credits()
@@ -54,7 +54,11 @@ public class GameHandler : MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();
+        #if UNITY_EDITOR
+                  UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                  Application.Quit();
+            #endif
     }
 
     public void CreditsBack()
