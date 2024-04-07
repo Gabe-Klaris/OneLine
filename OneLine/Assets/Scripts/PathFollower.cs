@@ -21,6 +21,8 @@ public class PathFollower : MonoBehaviour
 
     float moveRadius = 2;
 
+    Player playerScript;
+
     Vector3 startPosition;
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,8 @@ public class PathFollower : MonoBehaviour
         PathNode = GetComponentsInChildren<Node>();
         CheckNode();
         player.transform.position = PathNode[0].transform.position;
+        playerScript = player.GetComponent<Player>();
+
         // Code for setting line renderer for line view (copied from Unity Documentation)
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
@@ -159,9 +163,11 @@ public class PathFollower : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        float move = Input.GetAxis("Horizontal");
+
         DrawLine();
         // go forward direction
-        if ((Input.GetKey(KeyCode.RightArrow)) || (Input.GetKey(KeyCode.D))) {
+        if (move > 0) {
             // pos is incrimented here
             pos += MoveSpeed;
             // checks if not at next node
@@ -178,15 +184,19 @@ public class PathFollower : MonoBehaviour
                     Debug.Log("Movin1g");
                     pos += MoveSpeed;
                     player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
+                    // comment line above and uncomment line when player animation is added
+                    // playerScript.Move(player.transform.position);
                 }
             }
         }
 
         // go back direction (same as above but in reverse direction)
-        if ((Input.GetKey(KeyCode.LeftArrow)) || (Input.GetKey(KeyCode.A))) {
+        else if (move < 0) {
             pos -= MoveSpeed;
             if (player.transform.position != startPosition) {
                 Debug.Log("Moving");
+                // comment line above and uncomment line when player animation is added
+                // playerScript.Move(player.transform.position);
                 player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
             } 
             else {
@@ -197,6 +207,15 @@ public class PathFollower : MonoBehaviour
                     player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
                 }
             }
+        }
+        // uncomment line when player animation is added
+        /* else if ((move < 0 && playerScript.FaceRight) || (move > 0 && playerScript.FaceRight) {
+			playerScript.turn();
+		}) */
+
+        else {
+            // uncomment line when player animation is added
+            //playerScript.Stop();
         }
     
     }
