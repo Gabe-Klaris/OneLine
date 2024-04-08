@@ -32,6 +32,10 @@ public class Node : MonoBehaviour
         pathFuns.updateall();
     }
 
+    void OnCollisionEnter2D(Collision2D other) {
+        Debug.Log("Collision");
+    }
+
 
     void OnMouseDrag() {
         transform.position = pathFuns.checkDrag(this); 

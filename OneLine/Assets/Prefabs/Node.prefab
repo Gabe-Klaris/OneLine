@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3826093597665092859}
   - component: {fileID: 177009351652746798}
   - component: {fileID: 1159215432236195099}
-  - component: {fileID: 1377673195694186044}
+  - component: {fileID: 6811249200046815723}
   m_Layer: 0
   m_Name: Node
   m_TagString: Untagged
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rend: {fileID: 0}
---- !u!58 &1377673195694186044
+--- !u!58 &6811249200046815723
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

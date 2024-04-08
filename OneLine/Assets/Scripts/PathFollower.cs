@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// LERP SCRIPT, DO NOT USE
 public class PathFollower : MonoBehaviour
 {
     Node [] PathNode;
@@ -16,7 +17,8 @@ public class PathFollower : MonoBehaviour
 
     public Color c1 = Color.yellow;
     public Color c2 = Color.red;
-
+    
+    public bool stop = false;
     float previous;
 
     float moveRadius = 2;
@@ -83,7 +85,7 @@ public class PathFollower : MonoBehaviour
         if (index == CurrentNode || index == CurrentNode + 1) {
             movePlayer();
         }
-        Debug.Log(index);
+
 
         Vector3 prevNode = new Vector3(0, 0, 0);
         if (index == 0 || index == PathNode.Length - 1) {
@@ -99,8 +101,6 @@ public class PathFollower : MonoBehaviour
                 return mousePos;
             }
             else {
-                Debug.Log(OnePointNormalize(vdist));
-                Debug.Log(prevNode);
                 return prevNode + OnePointNormalize(vdist);
             }
         }
@@ -136,7 +136,6 @@ public class PathFollower : MonoBehaviour
 
     void movePlayer() {
         CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
-        Debug.Log(CurrentNode);
         startPosition = PathNode[CurrentNode].transform.position;
         player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
     }
@@ -145,7 +144,6 @@ public class PathFollower : MonoBehaviour
         if (CurrentNode >= 0) {
             pos = previous;
             CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
-            Debug.Log(CurrentNode);
             startPosition = PathNode[CurrentNode].transform.position;
         }
     }
@@ -168,6 +166,9 @@ public class PathFollower : MonoBehaviour
         DrawLine();
         // go forward direction
         if (move > 0) {
+            if (!playerScript.FaceRight) {
+                playerScript.turn();
+            }
             // pos is incrimented here
             pos += MoveSpeed;
             // checks if not at next node
@@ -183,21 +184,26 @@ public class PathFollower : MonoBehaviour
                     CheckNode();
                     Debug.Log("Movin1g");
                     pos += MoveSpeed;
-                    player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
+                    //player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
                     // comment line above and uncomment line when player animation is added
-                    // playerScript.Move(player.transform.position);
+                    playerScript.Move(player.transform.position);
                 }
             }
         }
 
         // go back direction (same as above but in reverse direction)
         else if (move < 0) {
+            Debug.Log("FaceRight");
+            Debug.Log(playerScript.FaceRight);
+            if (playerScript.FaceRight) {
+                playerScript.turn();
+            }
             pos -= MoveSpeed;
             if (player.transform.position != startPosition) {
                 Debug.Log("Moving");
                 // comment line above and uncomment line when player animation is added
-                // playerScript.Move(player.transform.position);
-                player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
+                playerScript.Move(player.transform.position);
+                //player.transform.position = Vector3.Lerp(startPosition, CurrentPositionHolder, pos);
             } 
             else {
                 if (CurrentNode > 0) {
@@ -208,14 +214,10 @@ public class PathFollower : MonoBehaviour
                 }
             }
         }
-        // uncomment line when player animation is added
-        /* else if ((move < 0 && playerScript.FaceRight) || (move > 0 && playerScript.FaceRight) {
-			playerScript.turn();
-		}) */
 
         else {
             // uncomment line when player animation is added
-            //playerScript.Stop();
+            playerScript.Stop();
         }
     
     }

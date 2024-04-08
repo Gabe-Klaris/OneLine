@@ -14,6 +14,10 @@ public class Path : MonoBehaviour
 
     static Vector3 CurrentPositionHolder;
 
+    public bool stopRight = false;
+
+    public bool stopLeft = false;
+
     public Color c1 = Color.yellow;
     public Color c2 = Color.red;
 
@@ -21,11 +25,14 @@ public class Path : MonoBehaviour
 
     float moveRadius = 2;
 
+    Player playerScript;
+
     Vector3 startPosition;
     // Start is called before the first frame update
     void Start()
     {
         PathNode = GetComponentsInChildren<Node>();
+        playerScript = player.GetComponent<Player>();
         CheckNode();
         player.transform.position = PathNode[0].transform.position;
         // Code for setting line renderer for line view (copied from Unity Documentation)
@@ -166,9 +173,14 @@ public class Path : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //float move = Input.GetAxis("Horizontal");
+
         DrawLine();
         // go forward direction
-        if ((Input.GetKey(KeyCode.RightArrow)) || (Input.GetKey(KeyCode.D))) {
+        if ((Input.GetKey(KeyCode.RightArrow) || (Input.GetKey(KeyCode.D))) && !stopRight) {
+            if (!playerScript.FaceRight) {
+                playerScript.turn();
+            }
             // pos is incrimented here
             pos += MoveSpeed;
             // checks if not at next node
@@ -190,7 +202,13 @@ public class Path : MonoBehaviour
         }
 
         // go back direction (same as above but in reverse direction)
-        if ((Input.GetKey(KeyCode.LeftArrow)) || (Input.GetKey(KeyCode.A))) {
+        else if (Input.GetKey(KeyCode.LeftArrow) || (Input.GetKey(KeyCode.A)) && !stopLeft) {
+            Debug.Log("FaceRight");
+            Debug.Log(playerScript.FaceRight);
+            if (playerScript.FaceRight) {
+                playerScript.turn();
+            }
+
             pos -= MoveSpeed;
             // checks if not hit previous node
             if (pos > 0) {
@@ -205,6 +223,10 @@ public class Path : MonoBehaviour
                     player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
                 }
             }
+        }
+
+        else {
+            playerScript.Stop();
         }
     
     }
