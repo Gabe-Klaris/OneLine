@@ -40,6 +40,7 @@ public class Path : MonoBehaviour
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.widthMultiplier = 0.08f;
         lineRenderer.positionCount = PathNode.Length;
+        lineRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
 
         // A simple 2 color gradient with a fixed alpha of 1.0f.
         float alpha = 1.0f;
@@ -187,7 +188,7 @@ public class Path : MonoBehaviour
             if (pos < Vector3.Distance(startPosition, CurrentPositionHolder)) {
                 Debug.Log("Moving");
                 // linear transform (goes to position pos between start and end position)
-                player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
+                playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
             } 
             else {
                 // here means hit next node
@@ -196,7 +197,7 @@ public class Path : MonoBehaviour
                     CheckNode();
                     Debug.Log("Movin1g");
                     pos += MoveSpeed;
-                    player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
+                    playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                 }
             }
         }
@@ -213,14 +214,14 @@ public class Path : MonoBehaviour
             // checks if not hit previous node
             if (pos > 0) {
                 Debug.Log("Moving");
-                player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
+                playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
             } 
             else {
                 if (CurrentNode > 0) {
                     CurrentNode--;
                     backNode();
                     pos -= MoveSpeed;
-                    player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
+                    playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                 }
             }
         }
