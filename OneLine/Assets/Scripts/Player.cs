@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
 
     public void Move(Vector3 newpos) {
         transform.position = newpos;
-        animator.SetBool("Move", true);
+        animator.SetBool("Walk", true);
         /* if (!WalkSFX.isPlaying){
             WalkSFX.Play();
         } */
