@@ -7,15 +7,39 @@ public class Player : MonoBehaviour
 
     //public AudioSource WalkSFX;
 
-    public Animator animator;
+    private Animator animator;
+
+    /*
+    public GameObject Char1; //basic line
+    public GameObject Char2; //on fire
+    public GameObject Char3; //on ice
+    public Animator anim1;
+    public Animator anim2;
+    public Animator anim3;
+    */
+
     public bool FaceRight = true;
 
     private Path pathFollower;
+
     // Start is called before the first frame update
     void Start()
     {
+        /*
+         Char1.SetActive(true);
+         Char2.SetActive(false);
+         Char3.SetActive(false);
+         animator = anim1;
+         */
+
         pathFollower = GameObject.FindGameObjectWithTag("Path").GetComponent<Path>();
         animator = gameObject.GetComponentInChildren<Animator>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 
     void OnCollisionEnter2D(Collision2D other) {
@@ -60,9 +84,35 @@ public class Player : MonoBehaviour
 		transform.localScale = theScale;
     }
 
-    // Update is called once per frame
-    void Update()
+    /*
+    void SwitchCharacter(int charNum)
     {
-        
+        if (charNum == 1)
+        {
+            Char1.SetActive(true);
+            Char2.SetActive(false);
+            Char3.SetActive(false);
+            animator = anim1;
+        }
+        else if (charNum == 2)
+        {
+            Char1.SetActive(false);
+            Char2.SetActive(true);
+            Char3.SetActive(false);
+            animator = anim2;
+        }
+        else if (charNum == 3)
+        {
+            Char1.SetActive(false);
+            Char2.SetActive(false);
+            Char3.SetActive(true);
+            animator = anim3;
+        }
+        else {
+            Debug.Log("SwitchCharacter is being given a wrong number");
+        }
     }
+    */
+
+
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1113311555373028363}
   - component: {fileID: 2725588463646349148}
+  - component: {fileID: 298273966305704872}
   m_Layer: 0
   m_Name: Blob
   m_TagString: Untagged
@@ -79,6 +80,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.75, y: 0.34}
   m_EdgeRadius: 0
+--- !u!114 &298273966305704872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2509280815090336013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9406392d352502b4ba9f0cdc8c3b6718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  FaceRight: 1
 --- !u!1 &4299870477995097402
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +189,7 @@ GameObject:
   - component: {fileID: 7263243369476021189}
   - component: {fileID: 5153894694127702586}
   m_Layer: 0
-  m_Name: PlayerArt
+  m_Name: PlayerArt_BasicLine
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
