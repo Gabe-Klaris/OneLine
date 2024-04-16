@@ -7,6 +7,7 @@ public class Path : MonoBehaviour
     Node [] PathNode;
     public GameObject player;
     public float MoveSpeed;
+    LineRenderer lineRenderer;
 
     int CurrentNode = 0;
 
@@ -18,6 +19,7 @@ public class Path : MonoBehaviour
 
     public bool stopLeft = false;
 
+    public Color defaultColor = Color.black;
     public Color c1 = Color.yellow;
     public Color c2 = Color.red;
 
@@ -35,22 +37,46 @@ public class Path : MonoBehaviour
         playerScript = player.GetComponent<Player>();
         CheckNode();
         player.transform.position = PathNode[0].transform.position;
+
         // Code for setting line renderer for line view (copied from Unity Documentation)
-        LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.widthMultiplier = 0.08f;
         lineRenderer.positionCount = PathNode.Length;
         lineRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
 
+        /* SetupLineColors(); */
+
         // A simple 2 color gradient with a fixed alpha of 1.0f.
         float alpha = 1.0f;
         Gradient gradient = new Gradient();
         gradient.SetKeys(
-            new GradientColorKey[] { new GradientColorKey(c1, 0.0f), new GradientColorKey(c2, 1.0f) },
+            new GradientColorKey[] { new GradientColorKey(c1, 0.0f), new GradientColorKey(c2, 0.0f) },
             new GradientAlphaKey[] { new GradientAlphaKey(alpha, 0.0f), new GradientAlphaKey(alpha, 1.0f) }
         );
         lineRenderer.colorGradient = gradient;
     }
+
+/*     void SetupLineColors()
+    {
+        List<GradientColorKey> colorKeys = new List<GradientColorKey>();
+        List<GradientAlphaKey> alphaKeys = new List<GradientAlphaKey>();
+        float alpha = 1.0f;
+
+        for (int i = 0; i < PathNode.Length - 1; i++) {
+            Color currentColor = defaultColor;
+            if (PathNode[i].tag == "Fire Node" && PathNode[i + 1].tag == "Fire Node") {
+                Debug.Log("found fire");
+                currentColor = c2;
+            }
+            colorKeys.Add(new GradientColorKey(currentColor, 0.0f));
+            alphaKeys.Add(new GradientAlphaKey(alpha, 0.0f));
+        }
+
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(colorKeys.ToArray(), alphaKeys.ToArray());
+        lineRenderer.colorGradient = gradient;
+    } */
 
     // sets start and end pos for linear transform
     public void CheckNode() {
@@ -195,7 +221,7 @@ public class Path : MonoBehaviour
                 if (CurrentNode < PathNode.Length - 1) {
                     CurrentNode++;
                     CheckNode();
-                    Debug.Log("Movin1g");
+                    Debug.Log("next node");
                     pos += MoveSpeed;
                     playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                 }

@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     */
 
     public bool FaceRight = true;
+    private bool onFire = false;
+    private bool onIce = false;
 
     private Path pathFollower;
 
@@ -39,7 +41,18 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /* onFire = CheckBetweenFireNodes(); */
+        if (onFire) {
+            Debug.Log("I'm on fire!");
+        }
+    }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Fire Node")
+        {
+            onFire = !onFire;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D other) {
@@ -49,7 +62,7 @@ public class Player : MonoBehaviour
             } else {
                 pathFollower.stopLeft = true;
             }
-            Debug.Log("DID thing");
+            Debug.Log("hit wall");
         }
     }
 

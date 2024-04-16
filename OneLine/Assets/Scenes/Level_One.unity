@@ -5100,6 +5100,10 @@ PrefabInstance:
       propertyPath: m_UseFullKinematicContacts
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5410913919969034362, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8892716270043938869, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
       propertyPath: nextLevelName
       value: Level_Two
@@ -5372,6 +5376,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3875699611057835427, guid: 56f616d97ca20e1478c6e12a856b8860, type: 3}
     - {fileID: -4225761901801274489, guid: 56f616d97ca20e1478c6e12a856b8860, type: 3}
+    - {fileID: 5660309910173777189, guid: 56f616d97ca20e1478c6e12a856b8860, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8963813454395411166, guid: 56f616d97ca20e1478c6e12a856b8860, type: 3}

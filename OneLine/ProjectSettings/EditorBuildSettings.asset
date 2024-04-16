@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Controls.unity
     guid: 119cc9cf0732ee14d8f8c6dd27c55787
   - enabled: 0
-    path: Assets/Scenes/LineMove.unity
+    path: Assets/Scenes/TestingScene.unity
     guid: 87df7fe6a25365046900b03877d146b8
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
