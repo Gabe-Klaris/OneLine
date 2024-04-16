@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
 
     private Path pathFollower;
 
+    public bool fire = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +41,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log(pathFollower.stopRight + " " + pathFollower.stopLeft);
     }
 
     void OnCollisionEnter2D(Collision2D other) {
@@ -50,14 +52,26 @@ public class Player : MonoBehaviour
                 pathFollower.stopLeft = true;
             }
             Debug.Log("DID thing");
+            Box wall = other.gameObject.GetComponent<Box>();
+            if (fire && wall.isIce) {
+                moveFree();
+                Debug.Log("Player is on fire");
+                other.gameObject.SetActive(false);
+            
+            }
         }
     }
 
-    void OnCollisionExit2D(Collision2D other) {
+    public void OnCollisionExit2D(Collision2D other) {
         if (other.gameObject.tag == "Wall") {
-            pathFollower.stopRight = false;
-            pathFollower.stopLeft = false;
+            moveFree();
         }
+    }
+
+    public void moveFree() {
+        pathFollower.stopRight = false;
+        pathFollower.stopLeft = false;
+        Debug.Log("Free");
     }
 
     public void Move(Vector3 newpos) {
@@ -82,6 +96,7 @@ public class Player : MonoBehaviour
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+        pathFollower.cap();
     }
 
     /*

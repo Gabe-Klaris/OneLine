@@ -23,7 +23,9 @@ public class Path : MonoBehaviour
 
     float previous;
 
-    float moveRadius = 2;
+    float moveRadius = 5;
+
+    float minRadius = 0.94f;
 
     Player playerScript;
 
@@ -33,8 +35,8 @@ public class Path : MonoBehaviour
     {
         PathNode = GetComponentsInChildren<Node>();
         playerScript = player.GetComponent<Player>();
-        CheckNode();
         player.transform.position = PathNode[0].transform.position;
+        CheckNode();
         // Code for setting line renderer for line view (copied from Unity Documentation)
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
@@ -54,13 +56,15 @@ public class Path : MonoBehaviour
 
     // sets start and end pos for linear transform
     public void CheckNode() {
-        if (CurrentNode < PathNode.Length - 1) {
-            //previous = pos;
-            Debug.Log(pos);
+        if (CurrentNode < PathNode.Length - 1 && CurrentNode >= 0) {
+            Debug.Log("Current Node: " + CurrentNode);
             pos = 0;
             CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
             startPosition = PathNode[CurrentNode].transform.position;
 
+            // rotation
+            Quaternion rotation = Quaternion.LookRotation(CurrentPositionHolder - player.transform.position, transform.TransformDirection(Vector3.up));
+            player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w );
         }
     }
 
@@ -90,6 +94,7 @@ public class Path : MonoBehaviour
 
 
         if (index == CurrentNode || index == CurrentNode + 1) {
+            Debug.Log("dont happen");
             movePlayer();
         }
         Debug.Log(index);
@@ -104,13 +109,21 @@ public class Path : MonoBehaviour
             }
             float dist = Vector3.Distance(mousePos, prevNode);
             Vector3 vdist = mousePos - prevNode;
-            if (dist < moveRadius) {
+            if (dist < moveRadius && dist > minRadius) {
                 return mousePos;
             }
-            else {
-                Debug.Log(OnePointNormalize(vdist));
-                Debug.Log(prevNode);
+            else if (dist > moveRadius) {
+                //Debug.Log(OnePointNormalize(vdist));
+                //Debug.Log(prevNode);
                 return prevNode + OnePointNormalize(vdist);
+            }
+            else if (dist < minRadius){
+                return prevNode + OnePointMinNormalize(vdist);
+            }
+            else {
+                Debug.Log("Error");
+                return node.transform.position;
+            
             }
         }
         else {
@@ -119,22 +132,51 @@ public class Path : MonoBehaviour
 
             float posDist = Vector3.Distance(mousePos, posNode);
             float prevDist = Vector3.Distance(mousePos, prevNode);
-
-            if (prevDist < moveRadius && posDist < moveRadius) {
+            if (prevDist < moveRadius && posDist < moveRadius && prevDist > minRadius && posDist > minRadius) {
+                Debug.Log("This3");
                 return mousePos;
             }
+
+            else if (posDist > moveRadius && prevDist < moveRadius) {
+                Debug.Log("This");
+                Vector3 vdist = mousePos - posNode;
+                return posNode + OnePointNormalize(vdist);
+            }
+            else if (prevDist > moveRadius && posDist < moveRadius) {
+                Debug.Log("This2");
+                Vector3 vdist = mousePos - prevNode;
+                return prevNode + OnePointNormalize(vdist);
+            }
+            else if (prevDist < minRadius && posDist < minRadius) {
+                Debug.Log("MinRadius!!!!!!!!!");
+                return node.transform.position;
+            }
+            else if (posDist < minRadius) {
+                Debug.Log("MinRadius");
+                Vector3 vdist = mousePos - posNode;
+                return posNode + OnePointMinNormalize(vdist);
+            }
+            else if (prevDist < minRadius) {
+                Debug.Log("MinRadius");
+                Vector3 vdist = mousePos - prevNode;
+                return prevNode + OnePointMinNormalize(vdist);
+            }
             else if (prevDist > posDist) {
+                Debug.Log("not this");
                 Vector3 vdist = mousePos - prevNode;
                 return prevNode + OnePointNormalize(vdist);
             }
             else if (posDist > prevDist) {
+                Debug.Log("not this");
                 Vector3 vdist = mousePos - posNode;
                 return posNode + OnePointNormalize(vdist);
             }
+
             else {
                 Debug.Log("Error");
                 return node.transform.position;
             }
+
         }
         
     }
@@ -144,11 +186,25 @@ public class Path : MonoBehaviour
         return newPos * moveRadius;
     }
 
+    Vector3 OnePointMinNormalize(Vector3 dist) {
+        Vector3 newPos = dist.normalized;
+        return newPos * minRadius;
+    }
+
     void movePlayer() {
         CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
-        Debug.Log(CurrentNode);
+        //Debug.Log(CurrentNode);
         startPosition = PathNode[CurrentNode].transform.position;
         player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
+
+        Quaternion rotation = Quaternion.LookRotation(CurrentPositionHolder - player.transform.position, transform.TransformDirection(Vector3.up));
+        player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w );
+    }
+
+    public void cap() {
+        if (CurrentNode == 0 && pos <= 0) {
+            player.transform.position = PathNode[0].transform.position;
+        }
     }
 
     void backNode() {
@@ -157,6 +213,8 @@ public class Path : MonoBehaviour
             startPosition = PathNode[CurrentNode].transform.position;
             pos = Vector3.Distance(startPosition, CurrentPositionHolder);
             Debug.Log(pos);
+            Quaternion rotation = Quaternion.LookRotation(startPosition - player.transform.position, transform.TransformDirection(Vector3.up));
+            player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w );
 
         }
     }
@@ -174,6 +232,7 @@ public class Path : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //Debug.Log(Vector3.Distance(PathNode[0].transform.position, PathNode[1].transform.position));
         //float move = Input.GetAxis("Horizontal");
 
         DrawLine();
@@ -189,17 +248,20 @@ public class Path : MonoBehaviour
                 Debug.Log("Moving");
                 // linear transform (goes to position pos between start and end position)
                 playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                pos += MoveSpeed;
             } 
             else {
                 // here means hit next node
-                if (CurrentNode < PathNode.Length - 1) {
+                if (CurrentNode < PathNode.Length - 1 && CurrentNode >= 0) {
                     CurrentNode++;
                     CheckNode();
                     Debug.Log("Movin1g");
                     pos += MoveSpeed;
                     playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                    pos += MoveSpeed;
                 }
             }
+            pos -= MoveSpeed;
         }
 
         // go back direction (same as above but in reverse direction)
@@ -215,6 +277,7 @@ public class Path : MonoBehaviour
             if (pos > 0) {
                 Debug.Log("Moving");
                 playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                pos -= MoveSpeed;
             } 
             else {
                 if (CurrentNode > 0) {
@@ -222,8 +285,10 @@ public class Path : MonoBehaviour
                     backNode();
                     pos -= MoveSpeed;
                     playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                    pos -= MoveSpeed;
                 }
             }
+            pos += MoveSpeed;
         }
 
         else {
