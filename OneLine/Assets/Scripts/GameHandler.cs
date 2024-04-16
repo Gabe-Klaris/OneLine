@@ -9,6 +9,7 @@ public class GameHandler : MonoBehaviour
     private GameObject player;
     private string sceneName;
     public AudioSource StartGameSFX;
+    public string nextLevelName;
 
     // Start is called before the first frame update
     void Start()
@@ -28,14 +29,20 @@ public class GameHandler : MonoBehaviour
         SceneManager.LoadScene("Level_One");
     }
 
+    public void NextLevel()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(nextLevelName);
+    }
+
     public void Credits()
     {
         SceneManager.LoadScene("Credits");
     }
 
-    public void Options()
+    public void Controls()
     {
-
+        SceneManager.LoadScene("Controls");
     }
 
     public void ResetLevel()
@@ -61,7 +68,7 @@ public class GameHandler : MonoBehaviour
             #endif
     }
 
-    public void CreditsBack()
+    public void Back()
     {
         SceneManager.LoadScene("MainMenu");
     }

@@ -152,7 +152,7 @@ PrefabInstance:
       objectReference: {fileID: 1778868145}
     - target: {fileID: 589877028076472584, guid: ad87c52100c0ffe44838869540f8037e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Options
+      value: Controls
       objectReference: {fileID: 0}
     - target: {fileID: 589877028076472584, guid: ad87c52100c0ffe44838869540f8037e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -248,11 +248,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3029002681935462837, guid: ad87c52100c0ffe44838869540f8037e, type: 3}
       propertyPath: m_Name
-      value: button_OPTIONS
+      value: button_CONTROLS
       objectReference: {fileID: 0}
     - target: {fileID: 6011461062687687176, guid: ad87c52100c0ffe44838869540f8037e, type: 3}
       propertyPath: m_Text
-      value: OPTIONS
+      value: CONTROLS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1283,7 +1283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7159770229825728722, guid: 02647825160ee4b43ba061454b2ee87a, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7159770229825728722, guid: 02647825160ee4b43ba061454b2ee87a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1501,7 +1501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6762431196656213773, guid: 8f615aae74afc714293c318e46050091, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6762431196656213773, guid: 8f615aae74afc714293c318e46050091, type: 3}
       propertyPath: m_LocalPosition.x
