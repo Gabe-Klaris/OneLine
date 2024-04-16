@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
 
     private Path pathFollower;
 
+    public bool fire = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -66,11 +68,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnCollisionExit2D(Collision2D other) {
+    public void OnCollisionExit2D(Collision2D other) {
         if (other.gameObject.tag == "Wall") {
-            pathFollower.stopRight = false;
-            pathFollower.stopLeft = false;
+            moveFree();
         }
+    }
+
+    public void moveFree() {
+        pathFollower.stopRight = false;
+        pathFollower.stopLeft = false;
+        Debug.Log("Free");
     }
 
     public void Move(Vector3 newpos) {
@@ -95,6 +102,7 @@ public class Player : MonoBehaviour
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+        pathFollower.cap();
     }
 
     /*
