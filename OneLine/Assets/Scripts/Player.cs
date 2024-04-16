@@ -21,8 +21,13 @@ public class Player : MonoBehaviour
     public bool FaceRight = true;
     private bool onFire = false;
     private bool onIce = false;
+    
+    Box wall;
 
     private Path pathFollower;
+
+    GameObject PlayerArt_Default;
+    GameObject PlayerArt_Fire;
 
     public bool fire = true;
 
@@ -38,6 +43,9 @@ public class Player : MonoBehaviour
 
         pathFollower = GameObject.FindGameObjectWithTag("Path").GetComponent<Path>();
         animator = gameObject.GetComponentInChildren<Animator>();
+
+        PlayerArt_Default = this.transform.GetChild(0).gameObject;
+        PlayerArt_Fire = this.transform.GetChild(1).gameObject;
     }
 
     // Update is called once per frame
@@ -46,13 +54,18 @@ public class Player : MonoBehaviour
         /* onFire = CheckBetweenFireNodes(); */
         if (onFire) {
             Debug.Log("I'm on fire!");
+            PlayerArt_Default.SetActive(false);
+            PlayerArt_Fire.SetActive(true);
+        }
+        else {
+            PlayerArt_Default.SetActive(true);
+            PlayerArt_Fire.SetActive(false);
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Fire Node")
-        {
+        if (other.tag == "Fire Node") {
             onFire = !onFire;
         }
     }
@@ -65,6 +78,10 @@ public class Player : MonoBehaviour
                 pathFollower.stopLeft = true;
             }
             Debug.Log("hit wall");
+            wall = other.gameObject.GetComponent<Box>();
+            if (wall.isIce) {
+                other.gameObject.SetActive(false);
+            }
         }
     }
 

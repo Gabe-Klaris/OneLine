@@ -6,6 +6,8 @@ public class Path : MonoBehaviour
 {
     Node [] PathNode;
     public GameObject player;
+
+    public GameObject levelCompleteMenuUI;
     public float MoveSpeed;
     LineRenderer lineRenderer;
 
@@ -90,6 +92,7 @@ public class Path : MonoBehaviour
             // rotation
             Quaternion rotation = Quaternion.LookRotation(CurrentPositionHolder - player.transform.position, transform.TransformDirection(Vector3.up));
             player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w );
+
         }
     }
 
@@ -240,9 +243,9 @@ public class Path : MonoBehaviour
             Debug.Log(pos);
             Quaternion rotation = Quaternion.LookRotation(startPosition - player.transform.position, transform.TransformDirection(Vector3.up));
             player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w );
-
         }
     }
+
 
     // Draw Line between nodes
     void DrawLine() {
@@ -284,6 +287,11 @@ public class Path : MonoBehaviour
                     pos += MoveSpeed;
                     playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                     pos += MoveSpeed;
+                }
+                else if (CurrentNode == PathNode.Length - 1) {
+                    Debug.Log("hit end");
+                    levelCompleteMenuUI.SetActive(true);
+                    Time.timeScale = 0f;
                 }
             }
             pos -= MoveSpeed;
