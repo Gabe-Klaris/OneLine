@@ -2586,6 +2586,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5002629938332366086, guid: a987cd6ca3f12d44a83efb69d1bc1610, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6454331073120530659, guid: a987cd6ca3f12d44a83efb69d1bc1610, type: 3}
       propertyPath: m_Name
       value: IceBlock (11)
