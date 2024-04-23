@@ -19,6 +19,7 @@ public class FireRenderer : MonoBehaviour
         lineRenderer.startColor = Color.red;
         lineRenderer.endColor = Color.red;
         lineRenderer.positionCount = 2;
+        lineRenderer.sortingOrder = 1;
     }
 
     // Update is called once per frame

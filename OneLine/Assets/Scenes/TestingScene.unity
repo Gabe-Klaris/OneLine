@@ -1391,9 +1391,6 @@ PrefabInstance:
       addedObject: {fileID: 1355734671}
     - targetCorrespondingSourceObject: {fileID: 7293958367569076908, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1355734674}
-    - targetCorrespondingSourceObject: {fileID: 7293958367569076908, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1355734678}
   m_SourcePrefab: {fileID: 100100000, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
 --- !u!1001 &1020074501
@@ -2060,22 +2057,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1355734674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1355734669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68eddbf54897cf24ba4e0ab0c8f738e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGrounded: 1
-  vertical: 0
-  left: 0
-  overlord: {fileID: 544039552}
 --- !u!61 &1355734678
 BoxCollider2D:
   m_ObjectHideFlags: 0
