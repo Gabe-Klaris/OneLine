@@ -830,14 +830,15 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'A/D to move left/right
+  m_Text: 'A/D or <-/-> to move left/right
+
+    Left Shift to sprint
+
+    Click and
+    drag the line to move it around
 
 
-    Click and drag the line to move it around
-
-
-    That''s
-    it!'
+    That''s it!'
 --- !u!222 &1945022549
 CanvasRenderer:
   m_ObjectHideFlags: 0
