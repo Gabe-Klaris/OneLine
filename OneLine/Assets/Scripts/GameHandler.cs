@@ -26,7 +26,7 @@ public class GameHandler : MonoBehaviour
     public void StartGame()
     {
         StartGameSFX.Play();
-        SceneManager.LoadScene("Level_One");
+        SceneManager.LoadScene("Level_One (Real)");
     }
 
     public void NextLevel()

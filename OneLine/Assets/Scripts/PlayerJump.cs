@@ -31,17 +31,18 @@ public class PlayerJump : MonoBehaviour
     {
         Debug.Log(isGrounded);
         if (isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
+            isGrounded = false;
             myRb.isKinematic = false;
             myRb.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
-            isGrounded = false;
+            Debug.Log("I'm jumping");
             animator.SetBool("Walk", false);
             vertical = true;
         }
-        else if (transform.position.y - overlord.transform.position.y < 0 && !isGrounded && vertical) {
+        else if (transform.position.y - overlord.transform.position.y < 0.49f && !isGrounded && vertical) {
             isGrounded = true;
             myRb.velocity = Vector2.zero;
             myRb.isKinematic = true;
-            transform.position = new Vector3(overlord.transform.position.x, overlord.transform.position.y);  
+            transform.position = new Vector3(overlord.transform.position.x, overlord.transform.position.y + 0.49f);  
             vertical = false;
             Debug.Log("I'm grounded");
         }
