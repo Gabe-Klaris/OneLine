@@ -98,6 +98,7 @@ MonoBehaviour:
   onFire: 0
   electric: 0
   fireTimer: 0
+  electricTimer: 0
   fire: 0
 --- !u!114 &8892716270043938869
 MonoBehaviour:

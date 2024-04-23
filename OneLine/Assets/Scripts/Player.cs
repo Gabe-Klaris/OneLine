@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     GameObject PlayerArt_Fire;
 
     public float fireTimer;
+    public float electricTimer;
 
     PlayerJump jump;
 
@@ -64,6 +65,9 @@ public class Player : MonoBehaviour
             PlayerArt_Default.SetActive(false);
             PlayerArt_Fire.SetActive(true);
         }
+        else if (electric) {
+            Debug.Log("I'm electric!");
+        }
         else {
             PlayerArt_Default.SetActive(true);
             PlayerArt_Fire.SetActive(false);
@@ -77,6 +81,13 @@ public class Player : MonoBehaviour
             if (fireTimer <= 0) {
                 Debug.Log("Dead!");
                 //Death();
+            }
+        }
+        else if (electric) {
+            electricTimer -= Time.deltaTime;
+            if (electricTimer <= 0) {
+                Debug.Log("No longer electric");
+                electric = false;
             }
         }
     }
@@ -100,6 +111,16 @@ public class Player : MonoBehaviour
             wall = other.gameObject.GetComponent<Box>();
             if (wall.isIce && onFire) {
                 other.gameObject.SetActive(false);
+            }
+        }
+        if (other.gameObject.tag == "Electric Node") {
+            Debug.Log("hit electric");
+            if (onFire) {
+                // Explode();
+                onFire = false;
+            } 
+            else {
+                electric = true;
             }
         }
     }

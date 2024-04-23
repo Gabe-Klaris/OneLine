@@ -292,34 +292,39 @@ public class Path : MonoBehaviour
         //float move = Input.GetAxis("Horizontal");
 
         DrawLine();
+        float currentMoveSpeed = MoveSpeed;
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            currentMoveSpeed *= 2;
+        }
+
         // go forward direction
         if ((Input.GetKey(KeyCode.RightArrow) || (Input.GetKey(KeyCode.D))) && !stopRight) {
             if (!playerScript.FaceRight) {
                 playerScript.turn();
             }
             // pos is incrimented here
-            pos += MoveSpeed;
+            pos += currentMoveSpeed;
             // checks if not at next node
             if (pos < Vector3.Distance(startPosition, CurrentPositionHolder)) {
                 // linear transform (goes to position pos between start and end position)
                 playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
-                pos += MoveSpeed;
+                pos += currentMoveSpeed;
             } 
             else {
                 // here means hit next node
                 if (CurrentNode < PathNode.Length - 1 && CurrentNode >= 0) {
                     CurrentNode++;
                     CheckNode();
-                    pos += MoveSpeed;
+                    pos += currentMoveSpeed;
                     playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
-                    pos += MoveSpeed;
+                    pos += currentMoveSpeed;
                 }
                 else if (CurrentNode == PathNode.Length - 1) {
                     levelCompleteMenuUI.SetActive(true);
                     Time.timeScale = 0f;
                 }
             }
-            pos -= MoveSpeed;
+            pos -= currentMoveSpeed;
         }
 
         // go back direction (same as above but in reverse direction)
@@ -328,22 +333,22 @@ public class Path : MonoBehaviour
                 playerScript.turn();
             }
 
-            pos -= MoveSpeed;
+            pos -= currentMoveSpeed;
             // checks if not hit previous node
             if (pos > 0) {
                 playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
-                pos -= MoveSpeed;
+                pos -= currentMoveSpeed;
             } 
             else {
                 if (CurrentNode > 0) {
                     CurrentNode--;
                     backNode();
-                    pos -= MoveSpeed;
+                    pos -= currentMoveSpeed;
                     playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
-                    pos -= MoveSpeed;
+                    pos -= currentMoveSpeed;
                 }
             }
-            pos += MoveSpeed;
+            pos += currentMoveSpeed;
         }
 
         else {
