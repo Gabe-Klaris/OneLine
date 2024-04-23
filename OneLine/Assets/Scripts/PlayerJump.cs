@@ -35,13 +35,14 @@ public class PlayerJump : MonoBehaviour
             myRb.isKinematic = false;
             myRb.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
             Debug.Log("I'm jumping");
+            animator.SetTrigger("Jump");
             animator.SetBool("Walk", false);
             vertical = true;
         }
         else if (transform.position.y - overlord.transform.position.y < 0.49f && !isGrounded && vertical) {
             isGrounded = true;
             myRb.velocity = Vector2.zero;
-            myRb.isKinematic = true;
+            myRb.isKinematic = true;    
             transform.position = new Vector3(overlord.transform.position.x, overlord.transform.position.y + 0.49f);  
             vertical = false;
             Debug.Log("I'm grounded");

@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
 
     PlayerJump jump;
 
+    public bool fire = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -96,17 +98,6 @@ public class Player : MonoBehaviour
             Switch switchScript = other.gameObject.GetComponent<Switch>();
             switchScript.door.SetActive(false);
         }
-        if (other.gameObject.tag == "Electric Node") {
-            Debug.Log("hit electric");
-            if (onFire) {
-                // Explode();
-                onFire = false;
-            } 
-            else {
-                electricTimer = 10;
-                electric = true;
-            }
-        }
     }
 
     void OnCollisionEnter2D(Collision2D other) {
@@ -122,7 +113,16 @@ public class Player : MonoBehaviour
                 other.gameObject.SetActive(false);
             }
         }
-        
+        if (other.gameObject.tag == "Electric Node") {
+            Debug.Log("hit electric");
+            if (onFire) {
+                // Explode();
+                onFire = false;
+            } 
+            else {
+                electric = true;
+            }
+        }
     }
 
     public void OnCollisionExit2D(Collision2D other) {
