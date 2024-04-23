@@ -1119,6 +1119,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5659245755114895918, guid: a987cd6ca3f12d44a83efb69d1bc1610, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 6454331073120530659, guid: a987cd6ca3f12d44a83efb69d1bc1610, type: 3}
       propertyPath: m_Name
       value: IceBlock
@@ -3343,7 +3347,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 437840669}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6501791347062842098, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1113311555373028363, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
       insertIndex: 1
