@@ -84,17 +84,68 @@ public class Path : MonoBehaviour
     // sets start and end pos for linear transform
     public void CheckNode() {
         if (CurrentNode < PathNode.Length - 1 && CurrentNode >= 0) {
-            Debug.Log("Current Node: " + CurrentNode);
             pos = 0;
             CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
             startPosition = PathNode[CurrentNode].transform.position;
 
+            // fire check
+            if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
+                playerScript.onFire = true;
+                if (playerScript.onFire) {
+                    playerScript.fireTimer = 5;
+                }
+            }
+            else {
+                playerScript.onFire = false;
+            }
+
             // rotation
             Quaternion rotation = Quaternion.LookRotation(CurrentPositionHolder - player.transform.position, transform.TransformDirection(Vector3.up));
-            player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w );
+            if (rotation.w != 0) {
+                //Debug.Log(rotation);
+                player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w);
+            }
+            if (rotation.x == 0) {
+                Debug.Log("RAH");
+            }
+
 
         }
     }
+    void backNode() {
+        if (CurrentNode >= 0) {
+            CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
+            startPosition = PathNode[CurrentNode].transform.position;
+            pos = Vector3.Distance(startPosition, CurrentPositionHolder);
+            
+            if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
+                playerScript.onFire = true;
+                if (playerScript.onFire) {
+                    playerScript.fireTimer = 5;
+                }
+            }
+            else {
+                playerScript.onFire = false;
+            }
+
+
+            Quaternion rotation = Quaternion.LookRotation(startPosition - player.transform.position, transform.TransformDirection(Vector3.up));
+            if ((rotation.w != 0)) {
+                //Debug.Log(rotation);
+                player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w);
+            }
+            else {
+                Debug.Log("rotation is 0");
+                Debug.Log(rotation);
+            
+            }
+            if (rotation.x == 0) {
+                Debug.Log("RAH");
+            }
+            
+        }
+    }
+
 
     public void updateall() {
         for (int i = 0; i < PathNode.Length; i++) {
@@ -122,10 +173,8 @@ public class Path : MonoBehaviour
 
 
         if (index == CurrentNode || index == CurrentNode + 1) {
-            Debug.Log("dont happen");
             movePlayer();
         }
-        Debug.Log(index);
 
         Vector3 prevNode = new Vector3(0, 0, 0);
         if (index == 0 || index == PathNode.Length - 1) {
@@ -149,7 +198,6 @@ public class Path : MonoBehaviour
                 return prevNode + OnePointMinNormalize(vdist);
             }
             else {
-                Debug.Log("Error");
                 return node.transform.position;
             
             }
@@ -161,47 +209,37 @@ public class Path : MonoBehaviour
             float posDist = Vector3.Distance(mousePos, posNode);
             float prevDist = Vector3.Distance(mousePos, prevNode);
             if (prevDist < moveRadius && posDist < moveRadius && prevDist > minRadius && posDist > minRadius) {
-                Debug.Log("This3");
                 return mousePos;
             }
 
             else if (posDist > moveRadius && prevDist < moveRadius) {
-                Debug.Log("This");
                 Vector3 vdist = mousePos - posNode;
                 return posNode + OnePointNormalize(vdist);
             }
             else if (prevDist > moveRadius && posDist < moveRadius) {
-                Debug.Log("This2");
                 Vector3 vdist = mousePos - prevNode;
                 return prevNode + OnePointNormalize(vdist);
             }
             else if (prevDist < minRadius && posDist < minRadius) {
-                Debug.Log("MinRadius!!!!!!!!!");
                 return node.transform.position;
             }
             else if (posDist < minRadius) {
-                Debug.Log("MinRadius");
                 Vector3 vdist = mousePos - posNode;
                 return posNode + OnePointMinNormalize(vdist);
             }
             else if (prevDist < minRadius) {
-                Debug.Log("MinRadius");
                 Vector3 vdist = mousePos - prevNode;
                 return prevNode + OnePointMinNormalize(vdist);
             }
             else if (prevDist > posDist) {
-                Debug.Log("not this");
                 Vector3 vdist = mousePos - prevNode;
                 return prevNode + OnePointNormalize(vdist);
             }
             else if (posDist > prevDist) {
-                Debug.Log("not this");
                 Vector3 vdist = mousePos - posNode;
                 return posNode + OnePointNormalize(vdist);
             }
-
             else {
-                Debug.Log("Error");
                 return node.transform.position;
             }
 
@@ -235,16 +273,6 @@ public class Path : MonoBehaviour
         }
     }
 
-    void backNode() {
-        if (CurrentNode >= 0) {
-            CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
-            startPosition = PathNode[CurrentNode].transform.position;
-            pos = Vector3.Distance(startPosition, CurrentPositionHolder);
-            Debug.Log(pos);
-            Quaternion rotation = Quaternion.LookRotation(startPosition - player.transform.position, transform.TransformDirection(Vector3.up));
-            player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w );
-        }
-    }
 
 
     // Draw Line between nodes
@@ -273,7 +301,6 @@ public class Path : MonoBehaviour
             pos += MoveSpeed;
             // checks if not at next node
             if (pos < Vector3.Distance(startPosition, CurrentPositionHolder)) {
-                Debug.Log("Moving");
                 // linear transform (goes to position pos between start and end position)
                 playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                 pos += MoveSpeed;
@@ -283,13 +310,11 @@ public class Path : MonoBehaviour
                 if (CurrentNode < PathNode.Length - 1 && CurrentNode >= 0) {
                     CurrentNode++;
                     CheckNode();
-                    Debug.Log("next node");
                     pos += MoveSpeed;
                     playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                     pos += MoveSpeed;
                 }
                 else if (CurrentNode == PathNode.Length - 1) {
-                    Debug.Log("hit end");
                     levelCompleteMenuUI.SetActive(true);
                     Time.timeScale = 0f;
                 }
@@ -299,8 +324,6 @@ public class Path : MonoBehaviour
 
         // go back direction (same as above but in reverse direction)
         else if (Input.GetKey(KeyCode.LeftArrow) || (Input.GetKey(KeyCode.A)) && !stopLeft) {
-            Debug.Log("FaceRight");
-            Debug.Log(playerScript.FaceRight);
             if (playerScript.FaceRight) {
                 playerScript.turn();
             }
@@ -308,7 +331,6 @@ public class Path : MonoBehaviour
             pos -= MoveSpeed;
             // checks if not hit previous node
             if (pos > 0) {
-                Debug.Log("Moving");
                 playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                 pos -= MoveSpeed;
             } 

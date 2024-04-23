@@ -19,8 +19,10 @@ public class Player : MonoBehaviour
     */
 
     public bool FaceRight = true;
-    private bool onFire = false;
-    private bool onIce = false;
+    public bool onFire = false;
+
+    public bool electric = false;
+    //private bool onIce = false;
     
     Box wall;
 
@@ -28,6 +30,10 @@ public class Player : MonoBehaviour
 
     GameObject PlayerArt_Default;
     GameObject PlayerArt_Fire;
+
+    public float fireTimer;
+
+    PlayerJump jump;
 
     public bool fire = true;
 
@@ -46,6 +52,7 @@ public class Player : MonoBehaviour
 
         PlayerArt_Default = this.transform.GetChild(0).gameObject;
         PlayerArt_Fire = this.transform.GetChild(1).gameObject;
+        jump = PlayerArt_Default.GetComponent<PlayerJump>();
     }
 
     // Update is called once per frame
@@ -63,10 +70,22 @@ public class Player : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (onFire) {
+            fireTimer -= Time.deltaTime;
+            if (fireTimer <= 0) {
+                Debug.Log("Dead!");
+                //Death();
+            }
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Fire Node") {
-            onFire = !onFire;
+        if (other.gameObject.tag == "Switch" && electric) {
+            Switch switchScript = other.gameObject.GetComponent<Switch>();
+            switchScript.door.SetActive(false);
         }
     }
 
@@ -79,7 +98,7 @@ public class Player : MonoBehaviour
             }
             Debug.Log("hit wall");
             wall = other.gameObject.GetComponent<Box>();
-            if (wall.isIce) {
+            if (wall.isIce && onFire) {
                 other.gameObject.SetActive(false);
             }
         }
@@ -99,7 +118,9 @@ public class Player : MonoBehaviour
 
     public void Move(Vector3 newpos) {
         transform.position = newpos;
-        animator.SetBool("Walk", true);
+        if (jump.isGrounded) {
+            animator.SetBool("Walk", true);
+        }
         /* if (!WalkSFX.isPlaying){
             WalkSFX.Play();
         } */
