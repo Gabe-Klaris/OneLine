@@ -98,6 +98,11 @@ public class Player : MonoBehaviour
             Switch switchScript = other.gameObject.GetComponent<Switch>();
             switchScript.door.SetActive(false);
         }
+        else if (other.gameObject.tag == "Electric Node") {
+            electricTimer = 5;
+            Debug.Log("I'm electric!");
+            electric = true;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D other) {

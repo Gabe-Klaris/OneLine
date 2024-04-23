@@ -29,7 +29,6 @@ public class PlayerJump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(isGrounded);
         if (isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
             isGrounded = false;
             myRb.isKinematic = false;
@@ -62,10 +61,6 @@ public class PlayerJump : MonoBehaviour
             left = false;
             Debug.Log("I'm grounded");
         }
-        Debug.Log(transform.rotation.z);
-
-
-
     }
 
 
