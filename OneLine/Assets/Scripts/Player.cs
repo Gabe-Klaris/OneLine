@@ -107,6 +107,7 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Wall") {
+            animator.SetTrigger("Collide");
             if (FaceRight) {
                 pathFollower.stopRight = true;
             } else {
