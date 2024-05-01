@@ -29,6 +29,10 @@ public class Path : MonoBehaviour
 
     float moveRadius = 5;
 
+    GameObject gameHandler;
+
+    GameHandler gameHandlerScript;
+
     float minRadius = 0.94f;
 
     Player playerScript;
@@ -39,6 +43,7 @@ public class Path : MonoBehaviour
     {
         PathNode = GetComponentsInChildren<Node>();
         playerScript = player.GetComponent<Player>();
+        Debug.Log(player);
         player.transform.position = PathNode[0].transform.position;
         CheckNode();
         // Code for setting line renderer for line view (copied from Unity Documentation)
@@ -58,6 +63,9 @@ public class Path : MonoBehaviour
             new GradientAlphaKey[] { new GradientAlphaKey(alpha, 0.0f), new GradientAlphaKey(alpha, 1.0f) }
         );
         lineRenderer.colorGradient = gradient;
+
+        gameHandler = GameObject.FindGameObjectWithTag("GameController");
+        gameHandlerScript = gameHandler.GetComponent<GameHandler>();
     }
 
 /*     void SetupLineColors()
@@ -87,27 +95,43 @@ public class Path : MonoBehaviour
             pos = 0;
             CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
             startPosition = PathNode[CurrentNode].transform.position;
-
+            Debug.Log(PathNode[CurrentNode]);
             // fire check
             if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
                 playerScript.onFire = true;
-                if (playerScript.onFire) {
-                    playerScript.fireTimer = 5;
-                }
+                playerScript.fire = false;
             }
-            else {
+            else if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag != "Fire Node") {
                 playerScript.onFire = false;
+                playerScript.fire = true;
+                playerScript.fireTimer = 5;
             }
+            else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
+                playerScript.onIce = true;
+                playerScript.ice = false;
+
+            }
+            else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag != "Ice Node") {
+                playerScript.onIce = false;
+                playerScript.ice = true;
+                playerScript.iceTimer = 5;
+            }
+            Debug.Log(PathNode[CurrentNode]);
+            Debug.Log(PathNode[CurrentNode + 1]);
+
 
             // rotation
             Quaternion rotation = Quaternion.LookRotation(CurrentPositionHolder - player.transform.position, transform.TransformDirection(Vector3.up));
-            if (rotation.w != 0) {
-                //Debug.Log(rotation);
+            if (rotation.z != 0) {
                 player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w);
             }
-            if (rotation.x == 0) {
-                Debug.Log("RAH");
+            else if (rotation.z == 0 && rotation.x == 0) {
+                player.transform.rotation = new Quaternion();
             }
+            else {
+                Debug.Log("zero rot");
+            }
+            Debug.Log(rotation);
 
 
         }
@@ -116,13 +140,26 @@ public class Path : MonoBehaviour
         if (CurrentNode >= 0) {
             CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
             startPosition = PathNode[CurrentNode].transform.position;
+            Debug.Log(PathNode[CurrentNode]);
+            Debug.Log(PathNode[CurrentNode + 1]);
             pos = Vector3.Distance(startPosition, CurrentPositionHolder);
             
             if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
                 playerScript.onFire = true;
-                if (playerScript.onFire) {
-                    playerScript.fireTimer = 5;
-                }
+                playerScript.fire = false;
+            }
+            else if (PathNode[CurrentNode].tag != "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
+                playerScript.fire = true;
+                playerScript.fireTimer = 5;
+            }
+            else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
+                playerScript.onIce = true;
+                playerScript.ice = false;
+
+            }
+            else if (PathNode[CurrentNode].tag != "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
+                playerScript.ice = true;
+                playerScript.iceTimer = 5;
             }
             else {
                 playerScript.onFire = false;
@@ -130,15 +167,16 @@ public class Path : MonoBehaviour
 
 
             Quaternion rotation = Quaternion.LookRotation(startPosition - player.transform.position, transform.TransformDirection(Vector3.up));
-            if ((rotation.w != 0)) {
-                //Debug.Log(rotation);
+            if (rotation.z != 0) {
                 player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w);
             }
-            else {
-                Debug.Log("rotation is 0");
-                Debug.Log(rotation);
-            
+            else if (rotation.z == 0 && rotation.y == 0) {
+                player.transform.rotation = new Quaternion( 0 , 0 , -0.49531f , 0.50465f);
             }
+            else if (rotation.z == 0 && rotation.x == 0) {
+                player.transform.rotation = new Quaternion();
+            }
+            Debug.Log(rotation);
             if (rotation.x == 0) {
                 Debug.Log("RAH");
             }
@@ -307,7 +345,8 @@ public class Path : MonoBehaviour
             // checks if not at next node
             if (pos < Vector3.Distance(startPosition, CurrentPositionHolder)) {
                 // linear transform (goes to position pos between start and end position)
-                playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                player.transform.position = (Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                playerScript.Move();
                 pos += currentMoveSpeed;
             } 
             else {
@@ -316,12 +355,20 @@ public class Path : MonoBehaviour
                     CurrentNode++;
                     CheckNode();
                     pos += currentMoveSpeed;
-                    playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                    player.transform.position = (Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                    playerScript.Move();
                     pos += currentMoveSpeed;
                 }
                 else if (CurrentNode == PathNode.Length - 1) {
-                    levelCompleteMenuUI.SetActive(true);
-                    Time.timeScale = 0f;
+                    if (gameHandlerScript.nextLevelName == "WinScene") {
+                        stopRight = true;
+                        stopLeft = true;
+                        playerScript.Victory();
+                    }
+                    else {
+                        levelCompleteMenuUI.SetActive(true);
+                        Time.timeScale = 0f;
+                    }
                 }
             }
             pos -= currentMoveSpeed;
@@ -336,7 +383,8 @@ public class Path : MonoBehaviour
             pos -= currentMoveSpeed;
             // checks if not hit previous node
             if (pos > 0) {
-                playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                player.transform.position = (Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                playerScript.Move();
                 pos -= currentMoveSpeed;
             } 
             else {
@@ -344,7 +392,8 @@ public class Path : MonoBehaviour
                     CurrentNode--;
                     backNode();
                     pos -= currentMoveSpeed;
-                    playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                    player.transform.position = (Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                    playerScript.Move();
                     pos -= currentMoveSpeed;
                 }
             }

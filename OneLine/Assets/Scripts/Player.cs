@@ -21,22 +21,41 @@ public class Player : MonoBehaviour
     public bool FaceRight = true;
     public bool onFire = false;
 
+    public bool onIce = false;
+
+    public bool fire = false;
+    
+    public bool ice = false;
+
     public bool electric = false;
     //private bool onIce = false;
     
     Box wall;
 
+    public GameObject path;
     private Path pathFollower;
-
+    GameObject jumper;
     GameObject PlayerArt_Default;
     GameObject PlayerArt_Fire;
 
     public float fireTimer;
+
+    public float iceTimer;
     public float electricTimer;
 
-    PlayerJump jump;
+    public Renderer rend;
 
-    public bool fire = true;
+    public Renderer rend2;
+
+    public Renderer rend3;
+
+    public bool active;
+
+    bool victory = false;
+
+    float VictoryTimer;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -48,12 +67,18 @@ public class Player : MonoBehaviour
          animator = anim1;
          */
 
-        pathFollower = GameObject.FindGameObjectWithTag("Path").GetComponent<Path>();
+        pathFollower = path.GetComponent<Path>();
         animator = gameObject.GetComponentInChildren<Animator>();
 
-        PlayerArt_Default = this.transform.GetChild(0).gameObject;
-        PlayerArt_Fire = this.transform.GetChild(1).gameObject;
-        jump = PlayerArt_Default.GetComponent<PlayerJump>();
+        jumper = this.gameObject.transform.GetChild(0).gameObject;
+        PlayerArt_Default = jumper.transform.GetChild(1).gameObject;
+        PlayerArt_Fire = jumper.transform.GetChild(2).gameObject;
+
+        rend = PlayerArt_Default.GetComponent<Renderer>();
+        rend2 = PlayerArt_Fire.GetComponent<Renderer>();
+        rend3 = jumper.GetComponentInChildren<Renderer>();
+        active = true;
+        Debug.Log("Player Start");
     }
 
     // Update is called once per frame
@@ -61,12 +86,15 @@ public class Player : MonoBehaviour
     {
         /* onFire = CheckBetweenFireNodes(); */
         if (onFire) {
-            Debug.Log("I'm on fire!");
+            //Debug.Log("I'm on fire!");
             PlayerArt_Default.SetActive(false);
             PlayerArt_Fire.SetActive(true);
         }
+        else if (ice || onIce) {
+            Debug.Log("I'm on ice!");
+        }
         else if (electric) {
-            Debug.Log("I'm electric!");
+            //Debug.Log("I'm electric!");
         }
         else {
             PlayerArt_Default.SetActive(true);
@@ -76,12 +104,23 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (onFire) {
+        if (fire) {
             fireTimer -= Time.deltaTime;
             if (fireTimer <= 0) {
-                Debug.Log("Dead!");
+                onFire = false;
+                fire = false;
                 //Death();
             }
+        }
+        if (ice) {
+            iceTimer -= Time.deltaTime;
+            Debug.Log("Ice Timer: " + iceTimer);
+            if (iceTimer <= 0) {
+                Debug.Log("No longer ice");
+                onIce = false;
+                ice = false;
+            }
+            
         }
         else if (electric) {
             electricTimer -= Time.deltaTime;
@@ -89,6 +128,17 @@ public class Player : MonoBehaviour
                 Debug.Log("No longer electric");
                 electric = false;
             }
+        }
+
+        else if (victory) {
+            VictoryTimer -= Time.deltaTime;
+            Vector3 hello = new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z);
+            if (VictoryTimer <= 0) {
+                victory = false;
+                pathFollower.levelCompleteMenuUI.SetActive(true);
+                Time.timeScale = 0f;
+            }
+            //Victory();
         }
     }
 
@@ -118,6 +168,10 @@ public class Player : MonoBehaviour
             if (wall.isIce && onFire) {
                 other.gameObject.SetActive(false);
             }
+
+            if (wall.isFire && onIce) {
+                other.gameObject.SetActive(false);
+            }
         }
         if (other.gameObject.tag == "Electric Node") {
             Debug.Log("hit electric");
@@ -129,6 +183,17 @@ public class Player : MonoBehaviour
                 electric = true;
             }
         }
+    }
+
+    public void Victory() {
+        StartCoroutine(wait());
+        victory = true;
+        VictoryTimer = 5;
+        
+    }
+
+    IEnumerator wait() {
+        yield return new WaitForSeconds(1);
     }
 
     public void OnCollisionExit2D(Collision2D other) {
@@ -143,11 +208,8 @@ public class Player : MonoBehaviour
         Debug.Log("Free");
     }
 
-    public void Move(Vector3 newpos) {
-        transform.position = newpos;
-        if (jump.isGrounded) {
-            animator.SetBool("Walk", true);
-        }
+    public void Move() {
+        animator.SetBool("Walk", true);
         /* if (!WalkSFX.isPlaying){
             WalkSFX.Play();
         } */

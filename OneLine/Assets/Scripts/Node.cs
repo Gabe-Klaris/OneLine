@@ -18,9 +18,17 @@ public class Node : MonoBehaviour
     {
         rend = GetComponent<Renderer>();
         rend.enabled = false;
-        path = GameObject.FindGameObjectWithTag("Path");
+        path = this.gameObject.transform.parent.gameObject;
         pathFuns = path.GetComponent<Path>();
         
+    }
+
+    public void changeline() {
+        Debug.Log("ping");
+    }
+
+    public void ping() {
+        Debug.Log("ping");
     }
 
     void OnMouseOver() {

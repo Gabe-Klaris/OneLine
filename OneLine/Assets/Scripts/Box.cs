@@ -7,11 +7,12 @@ public class Box : MonoBehaviour
 {
     public bool isIce = false;
 
-    private PathFollower pathFollower;
+    public bool isFire = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        pathFollower = GameObject.FindGameObjectWithTag("Path").GetComponent<PathFollower>();
+
         Debug.Log("Start");
     }
 
