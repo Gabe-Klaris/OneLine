@@ -91,7 +91,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         /* onFire = CheckBetweenFireNodes(); */
-        if (onFire) {
+        if (onFire || fire) {
             //Debug.Log("I'm on fire!");
             PlayerArt_Default.SetActive(false);
             PlayerArt_Fire.SetActive(true);
@@ -192,7 +192,7 @@ public class Player : MonoBehaviour
     }
 
     void Explode() {
-        
+
     }
 
     public void Victory() {

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/* REMOVE THIS SCRIPT FROM THE LAST FIRE NODE IN A SEQUENCE, OR THE RENDERER WILL NOT WORK */
+
 public class FireRenderer : MonoBehaviour
 {
     // Start is called before the first frame update

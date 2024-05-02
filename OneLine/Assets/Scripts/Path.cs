@@ -110,7 +110,7 @@ public class Path : MonoBehaviour
             else if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag != "Fire Node") {
                 playerScript.onFire = false;
                 playerScript.fire = true;
-                playerScript.fireTimer = 5;
+                playerScript.fireTimer = 4;
             }
             else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
                 playerScript.onIce = true;
