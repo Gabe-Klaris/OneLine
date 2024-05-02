@@ -21,6 +21,10 @@ public class PlayerJump : MonoBehaviour
 
     GameObject path;
     Path pathscript;
+
+    Path otherpath;
+
+    Player otherplayer;
     
     Player playerscript;
 
@@ -46,7 +50,7 @@ public class PlayerJump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
+        if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
             isGrounded = false;
             myRb.isKinematic = false;
             myRb.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
@@ -69,7 +73,7 @@ public class PlayerJump : MonoBehaviour
             pathscript.stopLeft = false;
             pathscript.stopRight = false;
         }
-        else if (isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z > 0.382 && transform.rotation.z < 0.707) {
+        else if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z > 0.382 && transform.rotation.z < 0.707) {
             isGrounded = false;
             myRb.isKinematic = false;  
             myRb.AddForce(new Vector2(-5, 0), ForceMode2D.Impulse);
@@ -89,7 +93,7 @@ public class PlayerJump : MonoBehaviour
             pathscript.stopLeft = false;
             pathscript.stopRight = false;
         }
-        else if (isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z < -0.382 && transform.rotation.z > -0.707) {
+        else if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z < -0.382 && transform.rotation.z > -0.707) {
             isGrounded = false;
             myRb.isKinematic = false;  
             myRb.AddForce(new Vector2(5, 0), ForceMode2D.Impulse);
@@ -109,7 +113,7 @@ public class PlayerJump : MonoBehaviour
             pathscript.stopLeft = false;
             pathscript.stopRight = false;
         }
-        else if (isGrounded && Input.GetKeyDown(KeyCode.S) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
+        else if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.S) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
             isGrounded = false;
             myRb.isKinematic = false;
             Debug.Log("I'm jumping");
@@ -145,8 +149,16 @@ public class PlayerJump : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.tag == "Node" && other.gameObject.transform.parent != path) {
+        if (other.gameObject.tag == "Node" && other.gameObject.transform.parent.gameObject != path && playerscript.active) {
+            Debug.Log(other.gameObject.transform.parent + " " + path);
             node = other.gameObject.GetComponent<Node>();
+            otherpath = other.gameObject.transform.parent.GetComponent<Path>();
+            otherplayer = otherpath.player.GetComponent<Player>();
+            playerscript.disappear();
+            otherplayer.appear();
+            otherpath.SnapPlayer(other.gameObject);
+            playerscript.active = false;
+            otherplayer.active = true;
             node.ping();
         }
     }

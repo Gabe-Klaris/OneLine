@@ -55,6 +55,8 @@ public class Player : MonoBehaviour
 
     float VictoryTimer;
 
+    PlayerJump jump;
+
 
 
     // Start is called before the first frame update
@@ -74,11 +76,15 @@ public class Player : MonoBehaviour
         PlayerArt_Default = jumper.transform.GetChild(1).gameObject;
         PlayerArt_Fire = jumper.transform.GetChild(2).gameObject;
 
+        jump = jumper.GetComponent<PlayerJump>();
+
         rend = PlayerArt_Default.GetComponent<Renderer>();
         rend2 = PlayerArt_Fire.GetComponent<Renderer>();
         rend3 = jumper.GetComponentInChildren<Renderer>();
-        active = true;
-        Debug.Log("Player Start");
+        
+        if (!active) {
+            disappear();
+        }
     }
 
     // Update is called once per frame
@@ -196,6 +202,18 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(1);
     }
 
+    public void appear() {
+        rend.enabled = true;
+        rend2.enabled = true;
+        rend3.enabled = true;
+    }
+
+    public void disappear() {
+        rend.enabled = false;
+        rend2.enabled = false;
+        rend3.enabled = false;
+    }
+
     public void OnCollisionExit2D(Collision2D other) {
         if (other.gameObject.tag == "Wall") {
             moveFree();
@@ -208,8 +226,11 @@ public class Player : MonoBehaviour
         Debug.Log("Free");
     }
 
-    public void Move() {
-        animator.SetBool("Walk", true);
+    public void Move(Vector3 newpos) {
+        transform.position = newpos;
+        if (jump.isGrounded) {
+            animator.SetBool("Walk", true);
+        }
         /* if (!WalkSFX.isPlaying){
             WalkSFX.Play();
         } */

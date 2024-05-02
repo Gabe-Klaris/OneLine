@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Path : MonoBehaviour
 {
-    Node [] PathNode;
+    private Node [] PathNode;
     public GameObject player;
 
     public GameObject levelCompleteMenuUI;
@@ -15,7 +15,7 @@ public class Path : MonoBehaviour
 
     float pos;
 
-    static Vector3 CurrentPositionHolder;
+    private Vector3 CurrentPositionHolder;
 
     public bool stopRight = false;
 
@@ -43,7 +43,7 @@ public class Path : MonoBehaviour
     {
         PathNode = GetComponentsInChildren<Node>();
         playerScript = player.GetComponent<Player>();
-        Debug.Log(player);
+                                                       
         player.transform.position = PathNode[0].transform.position;
         CheckNode();
         // Code for setting line renderer for line view (copied from Unity Documentation)
@@ -66,6 +66,13 @@ public class Path : MonoBehaviour
 
         gameHandler = GameObject.FindGameObjectWithTag("GameController");
         gameHandlerScript = gameHandler.GetComponent<GameHandler>();
+        printall();
+    }
+
+    void printall() {
+        for (int i = 0; i < PathNode.Length; i++) {
+            Debug.Log(PathNode[i]);
+        }
     }
 
 /*     void SetupLineColors()
@@ -95,7 +102,6 @@ public class Path : MonoBehaviour
             pos = 0;
             CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
             startPosition = PathNode[CurrentNode].transform.position;
-            Debug.Log(PathNode[CurrentNode]);
             // fire check
             if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
                 playerScript.onFire = true;
@@ -118,6 +124,8 @@ public class Path : MonoBehaviour
             }
             Debug.Log(PathNode[CurrentNode]);
             Debug.Log(PathNode[CurrentNode + 1]);
+            Debug.Log(player);  
+            printall();
 
 
             // rotation
@@ -129,9 +137,7 @@ public class Path : MonoBehaviour
                 player.transform.rotation = new Quaternion();
             }
             else {
-                Debug.Log("zero rot");
             }
-            Debug.Log(rotation);
 
 
         }
@@ -178,7 +184,6 @@ public class Path : MonoBehaviour
             }
             Debug.Log(rotation);
             if (rotation.x == 0) {
-                Debug.Log("RAH");
             }
             
         }
@@ -311,6 +316,20 @@ public class Path : MonoBehaviour
         }
     }
 
+    public void SnapPlayer(GameObject node) {
+        int index = 0;
+        for (int i = 0; i < PathNode.Length; i++) {
+            if (PathNode[i].transform.gameObject == node) {
+                index = i;
+            }
+        }
+        Debug.Log("Snappong");
+        CurrentNode = index;
+        CheckNode();
+        playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+
+    }
+
 
 
     // Draw Line between nodes
@@ -345,9 +364,10 @@ public class Path : MonoBehaviour
             // checks if not at next node
             if (pos < Vector3.Distance(startPosition, CurrentPositionHolder)) {
                 // linear transform (goes to position pos between start and end position)
-                player.transform.position = (Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
-                playerScript.Move();
+                playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                 pos += currentMoveSpeed;
+                Debug.Log(startPosition
+                    + " " + CurrentPositionHolder + " " + pos);
             } 
             else {
                 // here means hit next node
@@ -355,8 +375,7 @@ public class Path : MonoBehaviour
                     CurrentNode++;
                     CheckNode();
                     pos += currentMoveSpeed;
-                    player.transform.position = (Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
-                    playerScript.Move();
+                    playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                     pos += currentMoveSpeed;
                 }
                 else if (CurrentNode == PathNode.Length - 1) {
@@ -383,8 +402,7 @@ public class Path : MonoBehaviour
             pos -= currentMoveSpeed;
             // checks if not hit previous node
             if (pos > 0) {
-                player.transform.position = (Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
-                playerScript.Move();
+                playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                 pos -= currentMoveSpeed;
             } 
             else {
@@ -392,8 +410,7 @@ public class Path : MonoBehaviour
                     CurrentNode--;
                     backNode();
                     pos -= currentMoveSpeed;
-                    player.transform.position = (Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
-                    playerScript.Move();
+                    playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                     pos -= currentMoveSpeed;
                 }
             }
