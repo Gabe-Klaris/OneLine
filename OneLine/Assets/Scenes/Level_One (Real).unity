@@ -9613,6 +9613,10 @@ PrefabInstance:
       propertyPath: path
       value: 
       objectReference: {fileID: 1874179922}
+    - target: {fileID: 298273966305704872, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
+      propertyPath: active
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1113311555373028363, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -9634,8 +9638,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1230769444124063630, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
+      propertyPath: left
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1230769444124063630, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
       propertyPath: right
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2509280815090336013, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
       propertyPath: m_Name
@@ -9750,6 +9758,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 147306332}
+    - target: {fileID: 7593182669770418159, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 9b543a32352094f31a93cea2b2a01afa, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

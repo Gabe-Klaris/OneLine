@@ -96,7 +96,7 @@ MonoBehaviour:
   FaceRight: 1
   onFire: 0
   onIce: 0
-  fire: 1
+  fire: 0
   ice: 0
   electric: 0
   path: {fileID: 0}
@@ -106,7 +106,7 @@ MonoBehaviour:
   rend: {fileID: 0}
   rend2: {fileID: 0}
   rend3: {fileID: 0}
-  active: 0
+  active: 1
 --- !u!114 &8892716270043938869
 MonoBehaviour:
   m_ObjectHideFlags: 0
