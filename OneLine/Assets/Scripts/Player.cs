@@ -191,11 +191,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    void Explode() {
+        
+    }
+
     public void Victory() {
         StartCoroutine(wait());
         victory = true;
         VictoryTimer = 5;
-        
+
     }
 
     IEnumerator wait() {
