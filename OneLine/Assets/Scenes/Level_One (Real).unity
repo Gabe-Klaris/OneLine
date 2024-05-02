@@ -9638,8 +9638,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1230769444124063630, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
+      propertyPath: left
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1230769444124063630, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
       propertyPath: right
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2509280815090336013, guid: 1fd40ae5a5c745c42b9572af0654c8c8, type: 3}
       propertyPath: m_Name
