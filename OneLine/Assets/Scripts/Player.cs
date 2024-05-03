@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -40,6 +41,8 @@ public class Player : MonoBehaviour
     GameObject PlayerArt_Ice;
     GameObject PlayerArt_Electric;
 
+    ParticleSystem fireParticles;
+
     public float fireTimer;
 
     public float iceTimer;
@@ -52,6 +55,8 @@ public class Player : MonoBehaviour
     public Renderer spriteMaskRend;
 
     public Renderer iceRend;
+
+    public Renderer electricRend;
 
     public bool active;
 
@@ -90,7 +95,10 @@ public class Player : MonoBehaviour
         fireRend = PlayerArt_Fire.GetComponent<Renderer>();
         spriteMaskRend = jumper.GetComponentInChildren<Renderer>();
         iceRend = PlayerArt_Ice.GetComponent<Renderer>();
+        electricRend = PlayerArt_Electric.GetComponent<Renderer>();
         
+        fireParticles = GetComponent<ParticleSystem>();
+
         if (!active) {
             disappear();
         }
@@ -103,17 +111,21 @@ public class Player : MonoBehaviour
             //Debug.Log("I'm on fire!");
             PlayerArt_Default.SetActive(false);
             PlayerArt_Ice.SetActive(false);
+            PlayerArt_Electric.SetActive(false);
             PlayerArt_Fire.SetActive(true);
         }
         else if (onIce || ice) {
             PlayerArt_Default.SetActive(false);
             PlayerArt_Fire.SetActive(false);
+            PlayerArt_Electric.SetActive(false);
             PlayerArt_Ice.SetActive(true);
             Debug.Log("I'm on ice!");
         }
         else if (onElectric || electric) {
             Debug.Log("I'm electric!");
             PlayerArt_Default.SetActive(false);
+            PlayerArt_Fire.SetActive(false);
+            PlayerArt_Ice.SetActive(false);
             PlayerArt_Electric.SetActive(true);
         }
         else {
@@ -154,11 +166,13 @@ public class Player : MonoBehaviour
 
         else if (victory) {
             VictoryTimer -= Time.deltaTime;
-            Vector3 hello = new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z);
+            Vector3 hello = new Vector3(transform.position.x + 0.05f, transform.position.y, transform.position.z);
+            Move(hello);
             if (VictoryTimer <= 0) {
                 victory = false;
-                pathFollower.levelCompleteMenuUI.SetActive(true);
+                SceneManager.LoadScene("WinScene");
                 Time.timeScale = 0f;
+                fireParticles.Stop();
             }
             //Victory();
         }
@@ -200,6 +214,8 @@ public class Player : MonoBehaviour
         StartCoroutine(wait());
         victory = true;
         VictoryTimer = 5;
+        fireParticles.Play();
+
     }
 
     IEnumerator wait() {
@@ -211,6 +227,8 @@ public class Player : MonoBehaviour
         fireRend.enabled = true;
         spriteMaskRend.enabled = true;
         iceRend.enabled = true;
+        electricRend.enabled = true;
+        
     }
 
     public void disappear() {
@@ -218,6 +236,7 @@ public class Player : MonoBehaviour
         fireRend.enabled = false;
         spriteMaskRend.enabled = false;
         iceRend.enabled = false;
+        electricRend.enabled = false;
     }
 
     public void OnCollisionExit2D(Collision2D other) {
