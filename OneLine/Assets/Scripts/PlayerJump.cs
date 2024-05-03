@@ -30,6 +30,8 @@ public class PlayerJump : MonoBehaviour
 
     private Animator animator;
 
+    CameraFollow2DLERP mainCamera;
+
     Node node;
 
     private GameObject spritemask;
@@ -44,6 +46,8 @@ public class PlayerJump : MonoBehaviour
         playerscript = overlord.GetComponent<Player>();
         path = playerscript.path;
         pathscript = path.GetComponent<Path>();
+
+        mainCamera = Camera.main.GetComponent<CameraFollow2DLERP>();
     }
 
 
@@ -113,7 +117,7 @@ public class PlayerJump : MonoBehaviour
             pathscript.stopLeft = false;
             pathscript.stopRight = false;
         }
-        else if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.S) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
+        else if (playerscript.active && isGrounded && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
             isGrounded = false;
             myRb.isKinematic = false;
             Debug.Log("I'm jumping");
@@ -149,18 +153,28 @@ public class PlayerJump : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
+        Debug.Log("hello");
         if (other.gameObject.tag == "Node" && other.gameObject.transform.parent.gameObject != path && playerscript.active) {
             Debug.Log(other.gameObject.transform.parent + " " + path);
             node = other.gameObject.GetComponent<Node>();
             otherpath = other.gameObject.transform.parent.GetComponent<Path>();
             otherplayer = otherpath.player.GetComponent<Player>();
             playerscript.disappear();
+            mainCamera.SetTarget(otherplayer.gameObject);
             otherplayer.appear();
             otherpath.SnapPlayer(other.gameObject);
             playerscript.active = false;
             otherplayer.active = true;
             node.ping();
         }
+        if (other.gameObject.tag == "Wall") {
+            myRb.velocity = Vector2.zero;
+            Debug.Log("Wall");
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D other) {
+        Debug.Log("Wall");
     }
 
 

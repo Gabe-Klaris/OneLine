@@ -66,14 +66,8 @@ public class Path : MonoBehaviour
 
         gameHandler = GameObject.FindGameObjectWithTag("GameController");
         gameHandlerScript = gameHandler.GetComponent<GameHandler>();
-        printall();
     }
 
-    void printall() {
-        for (int i = 0; i < PathNode.Length; i++) {
-            Debug.Log(PathNode[i]);
-        }
-    }
 
 /*     void SetupLineColors()
     {
@@ -104,28 +98,32 @@ public class Path : MonoBehaviour
             startPosition = PathNode[CurrentNode].transform.position;
             // fire check
             if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
+                playerScript.ice = false;
                 playerScript.onFire = true;
                 playerScript.fire = false;
             }
             else if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag != "Fire Node") {
+                playerScript.ice = false;
                 playerScript.onFire = false;
                 playerScript.fire = true;
                 playerScript.fireTimer = 4;
             }
             else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
+                playerScript.fire = false;
                 playerScript.onIce = true;
                 playerScript.ice = false;
 
             }
             else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag != "Ice Node") {
+                playerScript.fire = false;
                 playerScript.onIce = false;
                 playerScript.ice = true;
                 playerScript.iceTimer = 5;
             }
-            Debug.Log(PathNode[CurrentNode]);
-            Debug.Log(PathNode[CurrentNode + 1]);
-            Debug.Log(player);  
-            printall();
+            else {
+                playerScript.onFire = false;
+                playerScript.onIce = false;
+            }
 
 
             // rotation
@@ -151,19 +149,23 @@ public class Path : MonoBehaviour
             pos = Vector3.Distance(startPosition, CurrentPositionHolder);
             
             if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
+                playerScript.ice = false;
                 playerScript.onFire = true;
                 playerScript.fire = false;
             }
             else if (PathNode[CurrentNode].tag != "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
+                playerScript.ice = false;
                 playerScript.fire = true;
                 playerScript.fireTimer = 5;
             }
             else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
+                playerScript.fire = false;
                 playerScript.onIce = true;
                 playerScript.ice = false;
 
             }
             else if (PathNode[CurrentNode].tag != "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
+                playerScript.fire = false;
                 playerScript.ice = true;
                 playerScript.iceTimer = 5;
             }
@@ -327,6 +329,7 @@ public class Path : MonoBehaviour
         CurrentNode = index;
         CheckNode();
         playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+        CheckNode();
 
     }
 
@@ -366,8 +369,6 @@ public class Path : MonoBehaviour
                 // linear transform (goes to position pos between start and end position)
                 playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                 pos += currentMoveSpeed;
-                Debug.Log(startPosition
-                    + " " + CurrentPositionHolder + " " + pos);
             } 
             else {
                 // here means hit next node
@@ -378,7 +379,8 @@ public class Path : MonoBehaviour
                     playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                     pos += currentMoveSpeed;
                 }
-                else if (CurrentNode == PathNode.Length - 1) {
+                else if (CurrentNode == PathNode.Length - 1 && PathNode[CurrentNode].tag == "Finish" && playerScript.active) {
+                    Debug.Log(PathNode[CurrentNode].tag);
                     if (gameHandlerScript.nextLevelName == "WinScene") {
                         stopRight = true;
                         stopLeft = true;

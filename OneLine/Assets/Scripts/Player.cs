@@ -38,16 +38,20 @@ public class Player : MonoBehaviour
     GameObject PlayerArt_Default;
     GameObject PlayerArt_Fire;
 
+    GameObject PlayerArt_Ice;
+
     public float fireTimer;
 
     public float iceTimer;
     public float electricTimer;
 
-    public Renderer rend;
+    public Renderer defaultRend;
 
-    public Renderer rend2;
+    public Renderer fireRend;
 
-    public Renderer rend3;
+    public Renderer spriteMaskRend;
+
+    public Renderer iceRend;
 
     public bool active;
 
@@ -56,6 +60,7 @@ public class Player : MonoBehaviour
     float VictoryTimer;
 
     PlayerJump jump;
+
 
 
 
@@ -75,12 +80,15 @@ public class Player : MonoBehaviour
         jumper = this.gameObject.transform.GetChild(0).gameObject;
         PlayerArt_Default = jumper.transform.GetChild(1).gameObject;
         PlayerArt_Fire = jumper.transform.GetChild(2).gameObject;
+        PlayerArt_Ice = jumper.transform.GetChild(3).gameObject;
 
         jump = jumper.GetComponent<PlayerJump>();
 
-        rend = PlayerArt_Default.GetComponent<Renderer>();
-        rend2 = PlayerArt_Fire.GetComponent<Renderer>();
-        rend3 = jumper.GetComponentInChildren<Renderer>();
+
+        defaultRend = PlayerArt_Default.GetComponent<Renderer>();
+        fireRend = PlayerArt_Fire.GetComponent<Renderer>();
+        spriteMaskRend = jumper.GetComponentInChildren<Renderer>();
+        iceRend = PlayerArt_Ice.GetComponent<Renderer>();
         
         if (!active) {
             disappear();
@@ -94,9 +102,13 @@ public class Player : MonoBehaviour
         if (onFire || fire) {
             //Debug.Log("I'm on fire!");
             PlayerArt_Default.SetActive(false);
+            PlayerArt_Ice.SetActive(false);
             PlayerArt_Fire.SetActive(true);
         }
         else if (ice || onIce) {
+            PlayerArt_Default.SetActive(false);
+            PlayerArt_Fire.SetActive(false);
+            PlayerArt_Ice.SetActive(true);
             Debug.Log("I'm on ice!");
         }
         else if (electric) {
@@ -192,7 +204,7 @@ public class Player : MonoBehaviour
     }
 
     void Explode() {
-
+        
     }
 
     public void Victory() {
@@ -207,15 +219,17 @@ public class Player : MonoBehaviour
     }
 
     public void appear() {
-        rend.enabled = true;
-        rend2.enabled = true;
-        rend3.enabled = true;
+        defaultRend.enabled = true;
+        fireRend.enabled = true;
+        spriteMaskRend.enabled = true;
+        iceRend.enabled = true;
     }
 
     public void disappear() {
-        rend.enabled = false;
-        rend2.enabled = false;
-        rend3.enabled = false;
+        defaultRend.enabled = false;
+        fireRend.enabled = false;
+        spriteMaskRend.enabled = false;
+        iceRend.enabled = false;
     }
 
     public void OnCollisionExit2D(Collision2D other) {
