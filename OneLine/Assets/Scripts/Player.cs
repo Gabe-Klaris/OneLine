@@ -40,8 +40,6 @@ public class Player : MonoBehaviour
     GameObject PlayerArt_Ice;
     GameObject PlayerArt_Electric;
 
-    GameObject PlayerArt_Ice;
-
     public float fireTimer;
 
     public float iceTimer;
