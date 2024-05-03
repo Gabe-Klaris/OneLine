@@ -21,11 +21,25 @@ public class ElectricNode : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player") {
+            Debug.Log("hit electric");
             Player player = other.gameObject.GetComponent<Player>();
+            player.onElectric = true;
             if (player.onFire || player.fire) {
+                player.onFire = false;
+                player.fire = false;
                 explosion.SetActive(true);
                 StartCoroutine(Explode(1f));
             }
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player") {
+            Player player = other.gameObject.GetComponent<Player>();
+            player.onElectric = false;
+            player.electric = true;
+            player.electricTimer = 5;
         }
     }
 

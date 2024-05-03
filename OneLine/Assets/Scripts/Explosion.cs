@@ -18,7 +18,6 @@ public class Explosion : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Wall") {
-            Debug.Log("Deleted wall");
             other.gameObject.SetActive(false);
         }
     }

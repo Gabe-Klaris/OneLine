@@ -22,13 +22,13 @@ public class Player : MonoBehaviour
     public bool onFire = false;
 
     public bool onIce = false;
+    public bool onElectric = false;
 
     public bool fire = false;
     
     public bool ice = false;
 
     public bool electric = false;
-    //private bool onIce = false;
     
     Box wall;
 
@@ -37,6 +37,8 @@ public class Player : MonoBehaviour
     GameObject jumper;
     GameObject PlayerArt_Default;
     GameObject PlayerArt_Fire;
+    GameObject PlayerArt_Ice;
+    GameObject PlayerArt_Electric;
 
     public float fireTimer;
 
@@ -75,6 +77,8 @@ public class Player : MonoBehaviour
         jumper = this.gameObject.transform.GetChild(0).gameObject;
         PlayerArt_Default = jumper.transform.GetChild(1).gameObject;
         PlayerArt_Fire = jumper.transform.GetChild(2).gameObject;
+        PlayerArt_Ice = jumper.transform.GetChild(3).gameObject;
+        PlayerArt_Electric = jumper.transform.GetChild(4).gameObject;
 
         jump = jumper.GetComponent<PlayerJump>();
 
@@ -90,21 +94,26 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /* onFire = CheckBetweenFireNodes(); */
         if (onFire || fire) {
             //Debug.Log("I'm on fire!");
             PlayerArt_Default.SetActive(false);
             PlayerArt_Fire.SetActive(true);
         }
-        else if (ice || onIce) {
+        else if (onIce || ice) {
             Debug.Log("I'm on ice!");
+            PlayerArt_Default.SetActive(false);
+            PlayerArt_Ice.SetActive(true);
         }
-        else if (electric) {
-            //Debug.Log("I'm electric!");
+        else if (onElectric || electric) {
+            Debug.Log("I'm electric!");
+            PlayerArt_Default.SetActive(false);
+            PlayerArt_Electric.SetActive(true);
         }
         else {
             PlayerArt_Default.SetActive(true);
             PlayerArt_Fire.SetActive(false);
+            PlayerArt_Ice.SetActive(false);
+            PlayerArt_Electric.SetActive(false);
         }
     }
 
@@ -154,11 +163,10 @@ public class Player : MonoBehaviour
             Switch switchScript = other.gameObject.GetComponent<Switch>();
             switchScript.door.SetActive(false);
         }
-        else if (other.gameObject.tag == "Electric Node") {
+        /* else if (other.gameObject.tag == "Electric Node") {
             electricTimer = 5;
-            Debug.Log("I'm electric!");
             electric = true;
-        }
+        } */
     }
 
     void OnCollisionEnter2D(Collision2D other) {
@@ -171,35 +179,20 @@ public class Player : MonoBehaviour
             }
             Debug.Log("hit wall");
             wall = other.gameObject.GetComponent<Box>();
-            if (wall.isIce && onFire) {
+            if (wall.isIce && (onFire || fire)) {
                 other.gameObject.SetActive(false);
             }
 
-            if (wall.isFire && onIce) {
+            if (wall.isFire && (onIce || ice)) {
                 other.gameObject.SetActive(false);
             }
         }
-        if (other.gameObject.tag == "Electric Node") {
-            Debug.Log("hit electric");
-            if (onFire) {
-                // Explode();
-                onFire = false;
-            } 
-            else {
-                electric = true;
-            }
-        }
-    }
-
-    void Explode() {
-
     }
 
     public void Victory() {
         StartCoroutine(wait());
         victory = true;
         VictoryTimer = 5;
-
     }
 
     IEnumerator wait() {
