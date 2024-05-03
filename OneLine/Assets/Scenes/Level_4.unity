@@ -415,7 +415,7 @@ PrefabInstance:
       objectReference: {fileID: 2039213213}
     - target: {fileID: 3477260199130238695, guid: 02647825160ee4b43ba061454b2ee87a, type: 3}
       propertyPath: nextLevelName
-      value: No
+      value: END
       objectReference: {fileID: 0}
     - target: {fileID: 3665127404227142942, guid: 02647825160ee4b43ba061454b2ee87a, type: 3}
       propertyPath: m_Name
@@ -1646,7 +1646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 657613236871350130, guid: 5677a3a4371b4f147a5fdd7465069c04, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Finish
       objectReference: {fileID: 0}
     - target: {fileID: 3826093597665092859, guid: 5677a3a4371b4f147a5fdd7465069c04, type: 3}
       propertyPath: m_RootOrder
@@ -3278,6 +3278,10 @@ PrefabInstance:
     - target: {fileID: 3037787021632145020, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
       propertyPath: m_Name
       value: WinMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 3037787021632145020, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4031964050479005958, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

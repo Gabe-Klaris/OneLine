@@ -381,7 +381,7 @@ public class Path : MonoBehaviour
                 }
                 else if (CurrentNode == PathNode.Length - 1 && PathNode[CurrentNode].tag == "Finish" && playerScript.active) {
                     Debug.Log(PathNode[CurrentNode].tag);
-                    if (gameHandlerScript.nextLevelName == "WinScene") {
+                    if (gameHandlerScript.nextLevelName == "END") {
                         stopRight = true;
                         stopLeft = true;
                         playerScript.Victory();

@@ -81,7 +81,9 @@ public class PlayerJump : MonoBehaviour
             isGrounded = false;
             myRb.isKinematic = false;  
             myRb.AddForce(new Vector2(-5, 0), ForceMode2D.Impulse);
+            Debug.Log("Jump left");
             myRb.gravityScale = 0;
+            animator.SetTrigger("Jump");
             animator.SetBool("Walk", false);
             left = true;
             pathscript.stopLeft = true;
@@ -93,6 +95,7 @@ public class PlayerJump : MonoBehaviour
             myRb.velocity = Vector2.zero;
             transform.position = new Vector3(overlord.transform.position.x, overlord.transform.position.y);  
             left = false;
+            myRb.gravityScale = 1;
             Debug.Log("I'm grounded");
             pathscript.stopLeft = false;
             pathscript.stopRight = false;
@@ -102,6 +105,8 @@ public class PlayerJump : MonoBehaviour
             myRb.isKinematic = false;  
             myRb.AddForce(new Vector2(5, 0), ForceMode2D.Impulse);
             myRb.gravityScale = 0;
+            animator.SetTrigger("Jump");
+            Debug.Log("Jump right");
             animator.SetBool("Walk", false);
             right = true;
             pathscript.stopLeft = true;
@@ -113,6 +118,7 @@ public class PlayerJump : MonoBehaviour
             myRb.velocity = Vector2.zero;
             transform.position = new Vector3(overlord.transform.position.x, overlord.transform.position.y);  
             right = false;
+            myRb.gravityScale = 1;
             Debug.Log("I'm grounded");
             pathscript.stopLeft = false;
             pathscript.stopRight = false;
@@ -120,7 +126,6 @@ public class PlayerJump : MonoBehaviour
         else if (playerscript.active && isGrounded && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
             isGrounded = false;
             myRb.isKinematic = false;
-            Debug.Log("I'm jumping");
             animator.SetTrigger("Jump");
             animator.SetBool("Walk", false);
             spritemask.SetActive(false);
@@ -165,6 +170,13 @@ public class PlayerJump : MonoBehaviour
             otherpath.SnapPlayer(other.gameObject);
             playerscript.active = false;
             otherplayer.active = true;
+            otherplayer.fire = playerscript.fire;
+            otherplayer.ice = playerscript.ice;
+            otherplayer.electric = playerscript.electric;
+            playerscript.fire = false;
+            playerscript.ice = false;
+            playerscript.electric = false;
+
             node.ping();
         }
         if (other.gameObject.tag == "Wall") {
