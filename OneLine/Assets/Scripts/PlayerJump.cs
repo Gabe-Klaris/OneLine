@@ -59,7 +59,7 @@ public class PlayerJump : MonoBehaviour
             myRb.isKinematic = false;
             myRb.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
             Debug.Log("I'm jumping");
-            animator.SetTrigger("Jump");
+            animatorif();
             animator.SetBool("Walk", false);
             spritemask.SetActive(false);
             vertical = true;
@@ -83,7 +83,7 @@ public class PlayerJump : MonoBehaviour
             myRb.AddForce(new Vector2(-5, 0), ForceMode2D.Impulse);
             Debug.Log("Jump left");
             myRb.gravityScale = 0;
-            animator.SetTrigger("Jump");
+            animatorif();
             animator.SetBool("Walk", false);
             left = true;
             pathscript.stopLeft = true;
@@ -105,7 +105,7 @@ public class PlayerJump : MonoBehaviour
             myRb.isKinematic = false;  
             myRb.AddForce(new Vector2(5, 0), ForceMode2D.Impulse);
             myRb.gravityScale = 0;
-            animator.SetTrigger("Jump");
+            animatorif();
             Debug.Log("Jump right");
             animator.SetBool("Walk", false);
             right = true;
@@ -126,7 +126,7 @@ public class PlayerJump : MonoBehaviour
         else if (playerscript.active && isGrounded && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
             isGrounded = false;
             myRb.isKinematic = false;
-            animator.SetTrigger("Jump");
+            animatorif();
             animator.SetBool("Walk", false);
             spritemask.SetActive(false);
             down = true;
@@ -143,6 +143,21 @@ public class PlayerJump : MonoBehaviour
             Debug.Log("I'm grounded");
             pathscript.stopLeft = false;
             pathscript.stopRight = false;
+        }
+    }
+
+    void animatorif() {
+        if (playerscript.fire || playerscript.onFire) {
+            playerscript.fireAnim.SetTrigger("Jump");
+        }
+        else if (playerscript.ice || playerscript.onIce) {
+            playerscript.iceAnim.SetTrigger("Jump");
+        }
+        else if (playerscript.electric || playerscript.onElectric) {
+            playerscript.electricAnim.SetTrigger("Jump");
+        }
+        else {
+            playerscript.animator.SetTrigger("Jump");
         }
     }
 

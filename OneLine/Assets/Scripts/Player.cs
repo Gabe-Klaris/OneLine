@@ -8,16 +8,16 @@ public class Player : MonoBehaviour
 
     //public AudioSource WalkSFX;
 
-    private Animator animator;
+    public Animator animator;
 
     /*
     public GameObject Char1; //basic line
     public GameObject Char2; //on fire
     public GameObject Char3; //on ice
-    public Animator anim1;
-    public Animator anim2;
-    public Animator anim3;
     */
+    public Animator fireAnim;
+    public Animator iceAnim;
+    public Animator electricAnim;
 
     public bool FaceRight = true;
     public bool onFire = false;
@@ -80,7 +80,6 @@ public class Player : MonoBehaviour
          */
 
         pathFollower = path.GetComponent<Path>();
-        animator = gameObject.GetComponentInChildren<Animator>();
 
         jumper = this.gameObject.transform.GetChild(0).gameObject;
         PlayerArt_Default = jumper.transform.GetChild(1).gameObject;
@@ -90,6 +89,10 @@ public class Player : MonoBehaviour
 
         jump = jumper.GetComponent<PlayerJump>();
 
+        animator = PlayerArt_Default.GetComponent<Animator>();
+        fireAnim = PlayerArt_Fire.GetComponent<Animator>();
+        iceAnim = PlayerArt_Ice.GetComponent<Animator>();
+        electricAnim = PlayerArt_Electric.GetComponent<Animator>();
 
         defaultRend = PlayerArt_Default.GetComponent<Renderer>();
         fireRend = PlayerArt_Fire.GetComponent<Renderer>();
@@ -254,7 +257,18 @@ public class Player : MonoBehaviour
     public void Move(Vector3 newpos) {
         transform.position = newpos;
         if (jump.isGrounded) {
-            animator.SetBool("Walk", true);
+            if (fire || onFire) {
+                fireAnim.SetBool("Walk", true);
+            }
+            else if (ice || onIce) {
+                iceAnim.SetBool("Walk", true);
+            }
+            else if (electric || onElectric) {
+                electricAnim.SetBool("Walk", true);
+            }
+            else {
+                animator.SetBool("Walk", true);
+            }
         }
         /* if (!WalkSFX.isPlaying){
             WalkSFX.Play();
@@ -263,7 +277,18 @@ public class Player : MonoBehaviour
     }
 
     public void Stop() {
-        animator.SetBool("Walk", false);
+        if (fire || onFire) {
+            fireAnim.SetBool("Walk", false);
+        }
+        else if (ice || onIce) {
+            iceAnim.SetBool("Walk", false);
+        }
+        else if (electric || onElectric) {
+            electricAnim.SetBool("Walk", false);
+        }
+        else {
+            animator.SetBool("Walk", false);
+        }
         //WalkSFX.Stop();
     }
 
