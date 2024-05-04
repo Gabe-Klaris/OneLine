@@ -185,7 +185,7 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.tag == "Switch" && electric) {
             Switch switchScript = other.gameObject.GetComponent<Switch>();
-            switchScript.door.SetActive(false);
+            switchScript.Hit();
         }
         /* else if (other.gameObject.tag == "Electric Node") {
             electricTimer = 5;

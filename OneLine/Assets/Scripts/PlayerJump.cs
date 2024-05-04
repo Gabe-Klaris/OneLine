@@ -139,7 +139,7 @@ public class PlayerJump : MonoBehaviour
             myRb.isKinematic = true;    
             transform.position = new Vector3(overlord.transform.position.x, overlord.transform.position.y);  
             down = false;
-            spritemask.SetActive(true);
+            spritemask.SetActive(true); 
             Debug.Log("I'm grounded");
             pathscript.stopLeft = false;
             pathscript.stopRight = false;
