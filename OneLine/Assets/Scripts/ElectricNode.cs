@@ -45,6 +45,7 @@ public class ElectricNode : MonoBehaviour
 
     IEnumerator Explode(float delayTime)
     {
+        Debug.Log("BOOM!!!");
         yield return new WaitForSeconds(delayTime);
         explosion.SetActive(false);
     }

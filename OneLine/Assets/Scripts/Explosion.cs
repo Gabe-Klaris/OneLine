@@ -7,7 +7,7 @@ public class Explosion : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -17,7 +17,7 @@ public class Explosion : MonoBehaviour
     }
 
     void OnCollisionEnter2D(Collision2D other) {
-        if (other.gameObject.tag == "Wall") {
+        if (other.gameObject.tag == "Wall" && gameObject.activeSelf) {
             other.gameObject.SetActive(false);
         }
     }

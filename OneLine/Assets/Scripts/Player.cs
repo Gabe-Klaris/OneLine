@@ -111,7 +111,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         if (onFire || fire) {
-            //Debug.Log("I'm on fire!");
             PlayerArt_Default.SetActive(false);
             PlayerArt_Ice.SetActive(false);
             PlayerArt_Electric.SetActive(false);
@@ -122,10 +121,8 @@ public class Player : MonoBehaviour
             PlayerArt_Fire.SetActive(false);
             PlayerArt_Electric.SetActive(false);
             PlayerArt_Ice.SetActive(true);
-            Debug.Log("I'm on ice!");
         }
         else if (onElectric || electric) {
-            Debug.Log("I'm electric!");
             PlayerArt_Default.SetActive(false);
             PlayerArt_Fire.SetActive(false);
             PlayerArt_Ice.SetActive(false);
