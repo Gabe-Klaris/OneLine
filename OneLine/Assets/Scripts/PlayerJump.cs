@@ -174,7 +174,7 @@ public class PlayerJump : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         Debug.Log("hello");
-        if (other.gameObject.tag == "Node" && other.gameObject.transform.parent.gameObject != path && playerscript.active) {
+        if (other.gameObject.tag == "Node" && other.gameObject.transform.parent.gameObject != path && playerscript.active && !isGrounded) {
             Debug.Log(other.gameObject.transform.parent + " " + path);
             node = other.gameObject.GetComponent<Node>();
             otherpath = other.gameObject.transform.parent.GetComponent<Path>();

@@ -195,13 +195,26 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Wall") {
-            animator.SetTrigger("Collide");
+            if (fire || onFire) {
+                fireAnim.SetTrigger("Collide");
+            }
+            else if (ice || onIce) {
+                iceAnim.SetTrigger("Collide");
+            }
+            else if (electric || onElectric) {
+                electricAnim.SetTrigger("Collide");
+            }
+            else {
+                animator.SetTrigger("Collide");
+            }
+            
+            Debug.Log("hit wall");
             if (FaceRight) {
                 pathFollower.stopRight = true;
             } else {
                 pathFollower.stopLeft = true;
             }
-            Debug.Log("hit wall");
+
             wall = other.gameObject.GetComponent<Box>();
             if (wall.isIce && (onFire || fire)) {
                 other.gameObject.SetActive(false);
