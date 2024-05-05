@@ -700,7 +700,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Look it''s a box
+  m_text: 'Look it''s a wall
 
 '
   m_isRightToLeft: 0
@@ -833,7 +833,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 29.56, y: -7.84}
+  m_AnchoredPosition: {x: 29.26, y: -7.84}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &147306330
@@ -9956,6 +9956,18 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4741272167942668140, guid: d6bcba57049c3c5498a0e0711dd19613, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741272167942668140, guid: d6bcba57049c3c5498a0e0711dd19613, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741272167942668140, guid: d6bcba57049c3c5498a0e0711dd19613, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741272167942668140, guid: d6bcba57049c3c5498a0e0711dd19613, type: 3}
       propertyPath: m_LocalPosition.x
       value: 41.44
       objectReference: {fileID: 0}
@@ -9994,6 +10006,10 @@ PrefabInstance:
     - target: {fileID: 4741272167942668140, guid: d6bcba57049c3c5498a0e0711dd19613, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741272167942668140, guid: d6bcba57049c3c5498a0e0711dd19613, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8292627564828583049, guid: d6bcba57049c3c5498a0e0711dd19613, type: 3}
       propertyPath: m_Name

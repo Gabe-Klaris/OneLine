@@ -291,6 +291,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 711569591}
     m_Modifications:
+    - target: {fileID: 1580308899471720979, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1149.213
+      objectReference: {fileID: 0}
+    - target: {fileID: 1580308899471720979, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 671.847
+      objectReference: {fileID: 0}
+    - target: {fileID: 1580308899471720979, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -29.865
+      objectReference: {fileID: 0}
     - target: {fileID: 2415519064270263262, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 5
@@ -304,8 +316,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3204547279448545172, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 4.2201e-10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3204547279448545172, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -72
+      value: -81
       objectReference: {fileID: 0}
     - target: {fileID: 4031964050479005958, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -415,9 +431,13 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5718300727848054785, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c5630c99584d54f9786a404907adfc32, type: 3}
     - target: {fileID: 7593182669770418159, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
       propertyPath: m_Text
-      value: You Win!
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7593182669770418159, guid: 74e008be9cb0ab449864197fad06269b, type: 3}
       propertyPath: m_FontData.m_Font
