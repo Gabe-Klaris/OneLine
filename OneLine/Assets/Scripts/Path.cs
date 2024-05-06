@@ -224,6 +224,18 @@ public class Path : MonoBehaviour
 
 
         if (index == CurrentNode || index == CurrentNode + 1) {
+            if (stopRight && index == CurrentNode + 1) {
+                pos -= MoveSpeed;
+            }
+            else if (stopLeft && index == CurrentNode) {
+                pos += MoveSpeed;
+            }
+            else if (stopRight && index == CurrentNode) {
+                pos += MoveSpeed;
+            }
+            else if (stopLeft && index == CurrentNode + 1) {
+                pos -= MoveSpeed;
+            }
             movePlayer();
         }
 

@@ -11,6 +11,8 @@ public class PlayerJump : MonoBehaviour
 
     public bool vertical;
 
+    Box wall;
+
     public bool left;
 
     public bool right;
@@ -228,6 +230,14 @@ public class PlayerJump : MonoBehaviour
             else {
                 myRb.velocity = Vector2.zero;
                 Debug.Log("Wall");
+            }
+            wall = other.gameObject.GetComponent<Box>();
+            if (wall.isIce && (playerscript.onFire || playerscript.fire)) {
+                other.gameObject.SetActive(false);
+            }
+
+            if (wall.isFire && (playerscript.onIce || playerscript.ice)) {
+                other.gameObject.SetActive(false);
             }
         }
     }

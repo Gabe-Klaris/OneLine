@@ -277,7 +277,7 @@ public class Player : MonoBehaviour
     }
 
     public void Move(Vector3 newpos) {
-        if (!movingSFX.isPlaying){
+        if (!movingSFX.isPlaying && active){
             movingSFX.Play();
         }
 
