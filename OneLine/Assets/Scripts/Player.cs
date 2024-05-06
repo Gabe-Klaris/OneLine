@@ -190,6 +190,7 @@ public class Player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Switch" && electric) {
+            Debug.Log("hit switch");
             Switch switchScript = other.gameObject.GetComponent<Switch>();
             switchScript.Hit();
         }
