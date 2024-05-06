@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Audio;
-
 public class VolumnController : MonoBehaviour
 {
     public AudioSource bgAudio;
@@ -18,6 +16,10 @@ public class VolumnController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        volumeControl();
+    }
+
+    public void volumeControl() {
         bgAudio.volume = slider.value;
     }
 }
