@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
 
     PlayerJump jump;
 
-
+    public AudioSource movingSFX;
 
 
     // Start is called before the first frame update
@@ -101,6 +101,8 @@ public class Player : MonoBehaviour
         electricRend = PlayerArt_Electric.GetComponent<Renderer>();
         
         fireParticles = GetComponent<ParticleSystem>();
+
+        movingSFX = GetComponent<AudioSource>();
 
         if (!active) {
             disappear();
@@ -265,6 +267,10 @@ public class Player : MonoBehaviour
     }
 
     public void Move(Vector3 newpos) {
+        if (!movingSFX.isPlaying){
+            movingSFX.Play();
+        }
+
         transform.position = newpos;
         if (jump.isGrounded) {
             if (fire || onFire) {
@@ -279,11 +285,7 @@ public class Player : MonoBehaviour
             else {
                 animator.SetBool("Walk", true);
             }
-        }
-        /* if (!WalkSFX.isPlaying){
-            WalkSFX.Play();
-        } */
-        
+        }    
     }
 
     public void Stop() {
