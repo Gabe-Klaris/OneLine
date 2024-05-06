@@ -14,14 +14,14 @@ public class Switch : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        on = door.transform.GetChild(0).gameObject;
-        off = door.transform.GetChild(1).gameObject;
+        on = transform.GetChild(0).gameObject;
+        off = transform.GetChild(1).gameObject;
+        on.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void Hit() {

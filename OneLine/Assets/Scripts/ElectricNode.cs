@@ -31,12 +31,30 @@ public class ElectricNode : MonoBehaviour
                 StartCoroutine(Explode(1f));
             }
         }
+        else if (other.gameObject.tag == "Jumper") {
+            PlayerJump jumper = other.gameObject.GetComponent<PlayerJump>();
+            Player player = jumper.playerscript;
+            player.onElectric = true;
+            if (player.onFire || player.fire) {
+                player.onFire = false;
+                player.fire = false;
+                explosion.SetActive(true);
+                StartCoroutine(Explode(1f));
+            }
+        }   
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player") {
             Player player = other.gameObject.GetComponent<Player>();
+            player.onElectric = false;
+            player.electric = true;
+            player.electricTimer = 5;
+        }
+        else if (other.gameObject.tag == "Jumper") {
+            PlayerJump jumper = other.gameObject.GetComponent<PlayerJump>();
+            Player player = jumper.playerscript;
             player.onElectric = false;
             player.electric = true;
             player.electricTimer = 5;

@@ -26,7 +26,7 @@ public class PlayerJump : MonoBehaviour
 
     Player otherplayer;
     
-    Player playerscript;
+    public Player playerscript;
 
     private Animator animator;
 
@@ -188,6 +188,9 @@ public class PlayerJump : MonoBehaviour
             otherplayer.fire = playerscript.fire;
             otherplayer.ice = playerscript.ice;
             otherplayer.electric = playerscript.electric;
+            otherplayer.fireTimer = playerscript.fireTimer;
+            otherplayer.iceTimer = playerscript.iceTimer;
+            otherplayer.electricTimer = playerscript.electricTimer;
             playerscript.fire = false;
             playerscript.ice = false;
             playerscript.electric = false;
@@ -195,8 +198,21 @@ public class PlayerJump : MonoBehaviour
             node.ping();
         }
         if (other.gameObject.tag == "Wall") {
-            myRb.velocity = Vector2.zero;
-            Debug.Log("Wall");
+            if (down) {
+                isGrounded = true;
+                myRb.velocity = Vector2.zero;
+                myRb.isKinematic = true;    
+                transform.position = new Vector3(overlord.transform.position.x, overlord.transform.position.y);  
+                down = false;
+                spritemask.SetActive(true); 
+                Debug.Log("I'm grounded");
+                pathscript.stopLeft = false;
+                pathscript.stopRight = false;
+            }
+            else {
+                myRb.velocity = Vector2.zero;
+                Debug.Log("Wall");
+            }
         }
     }
 
