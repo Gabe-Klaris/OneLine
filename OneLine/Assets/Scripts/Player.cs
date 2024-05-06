@@ -174,7 +174,7 @@ public class Player : MonoBehaviour
             Move(hello);
             if (VictoryTimer <= 0) {
                 victory = false;
-                SceneManager.LoadScene("WinScene");
+                SceneManager.LoadScene("END");
                 Time.timeScale = 0f;
                 fireParticles.Stop();
             }
