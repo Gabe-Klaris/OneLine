@@ -5,11 +5,11 @@ using UnityEngine;
 public class IceRenderer : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject nextFire;
+    public GameObject nextIce;
 
     LineRenderer lineRenderer;
 
-    Node [] fireNode;
+    Node [] iceNode;
     void Start()
     {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -26,6 +26,6 @@ public class IceRenderer : MonoBehaviour
     void Update()
     {
         lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, nextFire.transform.position);
+        lineRenderer.SetPosition(1, nextIce.transform.position);
     }
 }

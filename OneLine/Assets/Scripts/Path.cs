@@ -27,13 +27,13 @@ public class Path : MonoBehaviour
 
     float previous;
 
-    float moveRadius = 5;
+    float moveRadius = 3;
 
     GameObject gameHandler;
 
     GameHandler gameHandlerScript;
 
-    float minRadius = 0.94f;
+    float minRadius = 0.64f;
 
     Player playerScript;
 
@@ -106,7 +106,7 @@ public class Path : MonoBehaviour
                 playerScript.ice = false;
                 playerScript.onFire = false;
                 playerScript.fire = true;
-                playerScript.fireTimer = 4;
+                playerScript.fireTimer = 2;
             }
             else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
                 playerScript.fire = false;
@@ -118,7 +118,7 @@ public class Path : MonoBehaviour
                 playerScript.fire = false;
                 playerScript.onIce = false;
                 playerScript.ice = true;
-                playerScript.iceTimer = 5;
+                playerScript.iceTimer = 2;
             }
             else {
                 playerScript.onFire = false;
@@ -156,7 +156,7 @@ public class Path : MonoBehaviour
             else if (PathNode[CurrentNode].tag != "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
                 playerScript.ice = false;
                 playerScript.fire = true;
-                playerScript.fireTimer = 5;
+                playerScript.fireTimer = 2;
             }
             else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
                 playerScript.fire = false;
@@ -167,7 +167,7 @@ public class Path : MonoBehaviour
             else if (PathNode[CurrentNode].tag != "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
                 playerScript.fire = false;
                 playerScript.ice = true;
-                playerScript.iceTimer = 5;
+                playerScript.iceTimer = 2;
             }
             else {
                 playerScript.onFire = false;
@@ -184,7 +184,7 @@ public class Path : MonoBehaviour
             else if (rotation.z == 0 && rotation.x == 0) {
                 player.transform.rotation = new Quaternion();
             }
-            Debug.Log(rotation);
+            /* Debug.Log(rotation); */
             if (rotation.x == 0) {
             }
             
