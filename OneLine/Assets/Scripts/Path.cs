@@ -101,6 +101,9 @@ public class Path : MonoBehaviour
                 playerScript.ice = false;
                 playerScript.onFire = true;
                 playerScript.fire = false;
+                if (playerScript.onElectric || playerScript.electric) {
+                    playerScript.runExplode = true;
+                }
             }
             else if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag != "Fire Node") {
                 playerScript.ice = false;
@@ -152,6 +155,9 @@ public class Path : MonoBehaviour
                 playerScript.ice = false;
                 playerScript.onFire = true;
                 playerScript.fire = false;
+                if (playerScript.onElectric || playerScript.electric) {
+                    playerScript.runExplode = true;
+                }
             }
             else if (PathNode[CurrentNode].tag != "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
                 playerScript.ice = false;

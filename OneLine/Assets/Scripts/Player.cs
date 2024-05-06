@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
     public bool ice = false;
 
     public bool electric = false;
+    public bool runExplode = false;
+    public GameObject explosion;
     
     Box wall;
 
@@ -72,13 +74,6 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        /*
-         Char1.SetActive(true);
-         Char2.SetActive(false);
-         Char3.SetActive(false);
-         animator = anim1;
-         */
-
         pathFollower = path.GetComponent<Path>();
 
         jumper = this.gameObject.transform.GetChild(0).gameObject;
@@ -138,6 +133,14 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (runExplode) {
+            runExplode = false;
+            onElectric = false;
+            electric = false;
+            explosion.SetActive(true);
+            StartCoroutine(Explode(1f));
+        }
+        
         if (fire) {
             fireTimer -= Time.deltaTime;
             if (fireTimer <= 0) {
@@ -163,7 +166,6 @@ public class Player : MonoBehaviour
                 electric = false;
             }
         }
-
         else if (victory) {
             VictoryTimer -= Time.deltaTime;
             Vector3 hello = new Vector3(transform.position.x + 0.05f, transform.position.y, transform.position.z);
@@ -176,6 +178,13 @@ public class Player : MonoBehaviour
             }
             //Victory();
         }
+    }
+
+    IEnumerator Explode(float delayTime)
+    {
+        Debug.Log("BOOM!!!");
+        yield return new WaitForSeconds(delayTime);
+        explosion.SetActive(false);
     }
 
     void OnTriggerEnter2D(Collider2D other)
