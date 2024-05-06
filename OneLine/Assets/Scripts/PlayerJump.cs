@@ -174,7 +174,7 @@ public class PlayerJump : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         Debug.Log("hello");
-        if (other.gameObject.tag == "Node" && other.gameObject.transform.parent.gameObject != path && playerscript.active && !isGrounded) {
+        if ((other.gameObject.tag == "Node" || other.gameObject.tag == "Fire Node") && other.gameObject.transform.parent.gameObject != path && playerscript.active && !isGrounded) {
             Debug.Log(other.gameObject.transform.parent + " " + path);
             node = other.gameObject.GetComponent<Node>();
             otherpath = other.gameObject.transform.parent.GetComponent<Path>();
@@ -194,6 +194,22 @@ public class PlayerJump : MonoBehaviour
             playerscript.fire = false;
             playerscript.ice = false;
             playerscript.electric = false;
+
+            if (playerscript.onFire) {
+                otherplayer.fire = true;
+                otherplayer.fireTimer = 2;
+                playerscript.onFire = false;
+            }
+            else if (playerscript.onIce) {
+                otherplayer.ice = true;
+                otherplayer.iceTimer = 2;
+                playerscript.onIce = false;
+            }
+            else if (playerscript.onElectric) {
+                otherplayer.electric = true;
+                otherplayer.electricTimer = 2;
+                playerscript.onElectric = false;
+            }
 
             node.ping();
         }

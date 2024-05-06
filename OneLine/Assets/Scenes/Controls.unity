@@ -795,7 +795,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 14, y: -38}
-  m_SizeDelta: {x: 1100, y: 400}
+  m_SizeDelta: {x: 1100, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1945022548
 MonoBehaviour:
@@ -834,11 +834,14 @@ MonoBehaviour:
 
     Left Shift to sprint
 
-    Click and
-    drag the line to move it around
+    Space to
+    jump, S or down to drop
+
+    Click and drag the line to move it around
 
 
-    That''s it!'
+    That''s
+    it!'
 --- !u!222 &1945022549
 CanvasRenderer:
   m_ObjectHideFlags: 0

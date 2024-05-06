@@ -407,6 +407,7 @@ public class Path : MonoBehaviour
 
         // go back direction (same as above but in reverse direction)
         else if (Input.GetKey(KeyCode.LeftArrow) || (Input.GetKey(KeyCode.A)) && !stopLeft) {
+            Debug.Log("left");
             if (playerScript.FaceRight) {
                 playerScript.turn();
             }
