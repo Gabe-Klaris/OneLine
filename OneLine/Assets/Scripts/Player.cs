@@ -70,6 +70,8 @@ public class Player : MonoBehaviour
 
     public AudioSource movingSFX;
 
+    CameraFollow2DLERP mainCamera;
+
 
     // Start is called before the first frame update
     void Start()
@@ -98,6 +100,8 @@ public class Player : MonoBehaviour
         fireParticles = GetComponent<ParticleSystem>();
 
         movingSFX = GetComponent<AudioSource>();
+
+        mainCamera = Camera.main.GetComponent<CameraFollow2DLERP>();
 
         if (!active) {
             disappear();
@@ -227,16 +231,27 @@ public class Player : MonoBehaviour
             wall = other.gameObject.GetComponent<Box>();
             if (wall.isIce && (onFire || fire)) {
                 other.gameObject.SetActive(false);
+                if (FaceRight) {
+                pathFollower.stopRight = false;
+            } else {
+                pathFollower.stopLeft = false;
+            }
             }
 
             if (wall.isFire && (onIce || ice)) {
                 other.gameObject.SetActive(false);
+                if (FaceRight) {
+                pathFollower.stopRight = false;
+            } else {
+                pathFollower.stopLeft = false;
+            }
             }
         }
     }
 
     public void Victory() {
         StartCoroutine(wait());
+        mainCamera.follow = false;
         victory = true;
         VictoryTimer = 5;
         fireParticles.Play();
