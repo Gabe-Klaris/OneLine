@@ -101,6 +101,9 @@ public class Path : MonoBehaviour
                 playerScript.ice = false;
                 playerScript.onFire = true;
                 playerScript.fire = false;
+                if (playerScript.onElectric || playerScript.electric) {
+                    playerScript.runExplode = true;
+                }
             }
             else if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag != "Fire Node") {
                 playerScript.ice = false;
@@ -152,6 +155,9 @@ public class Path : MonoBehaviour
                 playerScript.ice = false;
                 playerScript.onFire = true;
                 playerScript.fire = false;
+                if (playerScript.onElectric || playerScript.electric) {
+                    playerScript.runExplode = true;
+                }
             }
             else if (PathNode[CurrentNode].tag != "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
                 playerScript.ice = false;
@@ -372,14 +378,18 @@ public class Path : MonoBehaviour
             } 
             else {
                 // here means hit next node
-                if (CurrentNode < PathNode.Length - 1 && CurrentNode >= 0) {
+                if (CurrentNode < PathNode.Length - 2 && CurrentNode >= 0) {
+                    if (playerScript.active) {
+                        Debug.Log("next " + CurrentNode);
+                        Debug.Log(PathNode.Length);
+                    }
                     CurrentNode++;
                     CheckNode();
                     pos += currentMoveSpeed;
                     playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
                     pos += currentMoveSpeed;
                 }
-                else if (CurrentNode == PathNode.Length - 1 && PathNode[CurrentNode].tag == "Finish" && playerScript.active) {
+                else if (CurrentNode == PathNode.Length - 2 && PathNode[CurrentNode + 1].tag == "Finish" && playerScript.active) {
                     Debug.Log(PathNode[CurrentNode].tag);
                     if (gameHandlerScript.nextLevelName == "END") {
                         stopRight = true;
@@ -409,6 +419,9 @@ public class Path : MonoBehaviour
             } 
             else {
                 if (CurrentNode > 0) {
+                    if (playerScript.active) {
+                        Debug.Log("back" + CurrentNode);
+                    }
                     CurrentNode--;
                     backNode();
                     pos -= currentMoveSpeed;

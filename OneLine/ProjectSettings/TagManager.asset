@@ -12,6 +12,7 @@ TagManager:
   - Fire Node
   - Switch
   - Node
+  - Jumper
   layers:
   - Default
   - TransparentFX
