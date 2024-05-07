@@ -229,7 +229,7 @@ public class Player : MonoBehaviour
             }
 
             wall = other.gameObject.GetComponent<Box>();
-            if (wall.isIce && (onFire || fire)) {
+            if (wall.isIce && (onFire || fire) && active) {
                 other.gameObject.SetActive(false);
                 if (FaceRight) {
                 pathFollower.stopRight = false;
@@ -238,7 +238,7 @@ public class Player : MonoBehaviour
             }
             }
 
-            if (wall.isFire && (onIce || ice)) {
+            if (wall.isFire && (onIce || ice) && active) {
                 other.gameObject.SetActive(false);
                 if (FaceRight) {
                 pathFollower.stopRight = false;
