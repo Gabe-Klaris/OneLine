@@ -50,14 +50,14 @@ public class ElectricNode : MonoBehaviour
             Player player = other.gameObject.GetComponent<Player>();
             player.onElectric = false;
             player.electric = true;
-            player.electricTimer = 5;
+            player.electricTimer = 3;
         }
         else if (other.gameObject.tag == "Jumper") {
             PlayerJump jumper = other.gameObject.GetComponent<PlayerJump>();
             Player player = jumper.playerscript;
             player.onElectric = false;
             player.electric = true;
-            player.electricTimer = 5;
+            player.electricTimer = 3;
         }
     }
 
