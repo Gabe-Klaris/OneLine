@@ -34,6 +34,10 @@ public class PlayerJump : MonoBehaviour
 
     CameraFollow2DLERP mainCamera;
 
+    bool prevright;
+
+    bool prevleft;
+
     Node node;
 
     private GameObject spritemask;
@@ -65,6 +69,8 @@ public class PlayerJump : MonoBehaviour
             animator.SetBool("Walk", false);
             spritemask.SetActive(false);
             vertical = true;
+            prevleft = pathscript.stopLeft;
+            prevright = pathscript.stopRight;
             pathscript.stopLeft = true;
             pathscript.stopRight = true;
         }
@@ -76,8 +82,8 @@ public class PlayerJump : MonoBehaviour
             vertical = false;
             spritemask.SetActive(true);
             Debug.Log("I'm grounded");
-            pathscript.stopLeft = false;
-            pathscript.stopRight = false;
+            pathscript.stopLeft = prevleft;
+            pathscript.stopRight = prevright;
         }
         else if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z > 0.382 && transform.rotation.z < 0.707) {
             isGrounded = false;
@@ -88,6 +94,8 @@ public class PlayerJump : MonoBehaviour
             animatorif();
             animator.SetBool("Walk", false);
             left = true;
+            prevleft = pathscript.stopLeft;
+            prevright = pathscript.stopRight;
             pathscript.stopLeft = true;
             pathscript.stopRight = true;
         }
@@ -99,8 +107,8 @@ public class PlayerJump : MonoBehaviour
             left = false;
             myRb.gravityScale = 1;
             Debug.Log("I'm grounded");
-            pathscript.stopLeft = false;
-            pathscript.stopRight = false;
+            pathscript.stopLeft = prevleft;
+            pathscript.stopRight = prevright;
         }
         else if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z < -0.382 && transform.rotation.z > -0.707) {
             isGrounded = false;
@@ -111,6 +119,8 @@ public class PlayerJump : MonoBehaviour
             Debug.Log("Jump right");
             animator.SetBool("Walk", false);
             right = true;
+            prevleft = pathscript.stopLeft;
+            prevright = pathscript.stopRight;
             pathscript.stopLeft = true;
             pathscript.stopRight = true;
         }
@@ -122,8 +132,8 @@ public class PlayerJump : MonoBehaviour
             right = false;
             myRb.gravityScale = 1;
             Debug.Log("I'm grounded");
-            pathscript.stopLeft = false;
-            pathscript.stopRight = false;
+            pathscript.stopLeft = prevleft;
+            pathscript.stopRight = prevright;
         }
         else if (playerscript.active && isGrounded && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
             isGrounded = false;
@@ -132,6 +142,8 @@ public class PlayerJump : MonoBehaviour
             animator.SetBool("Walk", false);
             spritemask.SetActive(false);
             down = true;
+            prevleft = pathscript.stopLeft;
+            prevright = pathscript.stopRight;
             pathscript.stopLeft = true;
             pathscript.stopRight = true;
         }
@@ -143,8 +155,8 @@ public class PlayerJump : MonoBehaviour
             down = false;
             spritemask.SetActive(true); 
             Debug.Log("I'm grounded");
-            pathscript.stopLeft = false;
-            pathscript.stopRight = false;
+            pathscript.stopLeft = prevleft;
+            pathscript.stopRight = prevright;
         }
     }
 
