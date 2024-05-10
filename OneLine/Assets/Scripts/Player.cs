@@ -68,7 +68,6 @@ public class Player : MonoBehaviour
 
     PlayerJump jump;
 
-    public AudioSource movingSFX;
 
     CameraFollow2DLERP mainCamera;
 
@@ -98,8 +97,6 @@ public class Player : MonoBehaviour
         electricRend = PlayerArt_Electric.GetComponent<Renderer>();
         
         fireParticles = GetComponent<ParticleSystem>();
-
-        movingSFX = GetComponent<AudioSource>();
 
         mainCamera = Camera.main.GetComponent<CameraFollow2DLERP>();
 
@@ -292,9 +289,6 @@ public class Player : MonoBehaviour
     }
 
     public void Move(Vector3 newpos) {
-        if (!movingSFX.isPlaying && active){
-            movingSFX.Play();
-        }
 
         transform.position = newpos;
         if (jump.isGrounded) {
