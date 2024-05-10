@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3427119017715781192}
   - component: {fileID: -6806458140577678984}
   - component: {fileID: 4695158282194817137}
+  - component: {fileID: 9013875524525806182}
   m_Layer: 0
   m_Name: IceBlock
   m_TagString: Wall
@@ -100,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isIce: 1
+  isFire: 0
 --- !u!61 &-6806458140577678984
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -172,3 +174,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!95 &9013875524525806182
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6454331073120530659}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0b6c4551f8706458a994fa35c1198c17, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
