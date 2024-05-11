@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// script for each switch object
 public class Switch : MonoBehaviour
 {
 
@@ -24,6 +26,9 @@ public class Switch : MonoBehaviour
     {
     }
 
+    // called by player
+    // switches the door
+    // sets button to on
     public void Hit() {
         door.SetActive(false);
         on.SetActive(true);
