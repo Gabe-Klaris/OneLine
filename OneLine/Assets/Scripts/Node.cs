@@ -13,6 +13,8 @@ public class Node : MonoBehaviour
 
     private Path pathFuns;
 
+    public bool selected = false;
+
     
     // Start is called before the first frame update
     void Start()
@@ -50,7 +52,7 @@ public class Node : MonoBehaviour
     // drag function
     // see path.cs for more info
     void OnMouseDrag() {
-        transform.position = pathFuns.checkDrag(this); 
+        transform.position = pathFuns.MoveMouse(this);
     }
 
     // simulates drag for path.cs function
@@ -63,6 +65,8 @@ public class Node : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (selected) {
+            transform.position = pathFuns.MoveStick(this);
+        }
     }
 }

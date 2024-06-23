@@ -16,6 +16,11 @@ public class Path : MonoBehaviour
     public float MoveSpeed;
     LineRenderer lineRenderer;
 
+    public bool selecting = false;
+    int movingNode;
+
+    bool down = false;
+
     // index in array of current node
     int CurrentNode = 0;
 
@@ -213,13 +218,23 @@ public class Path : MonoBehaviour
             node.simulateDrag();
         }
     }
+    public Vector3 MoveStick(Node node) {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        Vector3 stickPos = node.gameObject.transform.position + (new Vector3(h, v, 0) * 0.1f);
+        return checkMovement(stickPos, node);
+    }
+
+    public Vector3 MoveMouse(Node node) {
+        Vector3 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        MousePos.z = Camera.main.transform.position.z + Camera.main.nearClipPlane;
+        return checkMovement(MousePos, node);
+    }
 
     // function for dragging nodes
     // if node is dragged within radius of prev and post node, it moves to that position
     // if node is dragged outside radius of prev and post node, it moves to the edge of the radius
-    public Vector3 checkDrag(Node node) {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = Camera.main.transform.position.z + Camera.main.nearClipPlane;
+    public Vector3 checkMovement(Vector3 newPos, Node node) {
         player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
         // searches for node in array
         int index = 0;
@@ -260,11 +275,11 @@ public class Path : MonoBehaviour
                 prevNode = PathNode[index - 1].transform.position;
             }
             // distance between mouse and node before dragged node
-            float dist = Vector3.Distance(mousePos, prevNode);
-            Vector3 vdist = mousePos - prevNode;
+            float dist = Vector3.Distance(newPos, prevNode);
+            Vector3 vdist = newPos - prevNode;
             // if in radius, move to mouse position (all good)
             if (dist < moveRadius && dist > minRadius) {
-                return mousePos;
+                return newPos;
             }
             // if outside radius, move to edge of radius
             else if (dist > moveRadius) {
@@ -287,20 +302,20 @@ public class Path : MonoBehaviour
             prevNode = PathNode[index - 1].transform.position;
 
             // distance between mouse and nodes around it
-            float posDist = Vector3.Distance(mousePos, posNode);
-            float prevDist = Vector3.Distance(mousePos, prevNode);
+            float posDist = Vector3.Distance(newPos, posNode);
+            float prevDist = Vector3.Distance(newPos, prevNode);
             // if in radius of both nodes, move to mouse position (all good)
             if (prevDist < moveRadius && posDist < moveRadius && prevDist > minRadius && posDist > minRadius) {
-                return mousePos;
+                return newPos;
             }
             // if outside radius of next node, move to edge of radius of next node
             else if (posDist > moveRadius && prevDist < moveRadius) {
-                Vector3 vdist = mousePos - posNode;
+                Vector3 vdist = newPos - posNode;
                 return posNode + OnePointNormalize(vdist);
             }
             // if outside radius of prev node, move to edge of radius of prev node
             else if (prevDist > moveRadius && posDist < moveRadius) {
-                Vector3 vdist = mousePos - prevNode;
+                Vector3 vdist = newPos - prevNode;
                 return prevNode + OnePointNormalize(vdist);
             }
             // if inside both min radius, do not move (error case)
@@ -309,23 +324,23 @@ public class Path : MonoBehaviour
             }
             // if inside min radius of next node, push to edge of min radius of next node
             else if (posDist < minRadius) {
-                Vector3 vdist = mousePos - posNode;
+                Vector3 vdist = newPos - posNode;
                 return posNode + OnePointMinNormalize(vdist);
             }
             // if inside min radius of prev node, push to edge of min radius of prev node
             else if (prevDist < minRadius) {
-                Vector3 vdist = mousePos - prevNode;
+                Vector3 vdist = newPos - prevNode;
                 return prevNode + OnePointMinNormalize(vdist);
             }
             // since all other cases have been checked, this is when outside of both radius
             // push to edge of radius of closest node
             else if (prevDist > posDist) {
-                Vector3 vdist = mousePos - prevNode;
+                Vector3 vdist = newPos - prevNode;
                 return prevNode + OnePointNormalize(vdist);
             }
             // push to edge of radius of closest node
             else if (posDist > prevDist) {
-                Vector3 vdist = mousePos - posNode;
+                Vector3 vdist = newPos - posNode;
                 return posNode + OnePointNormalize(vdist);
             }
             else {
@@ -397,17 +412,17 @@ public class Path : MonoBehaviour
     void FixedUpdate()
     {
         //Debug.Log(Vector3.Distance(PathNode[0].transform.position, PathNode[1].transform.position));
-        //float move = Input.GetAxis("Horizontal");
+        float move = Input.GetAxisRaw("Horizontal");
 
         DrawLine();
         // dashing
         float currentMoveSpeed = MoveSpeed;
-        if (Input.GetKey(KeyCode.LeftShift)) {
+        if (Input.GetButton("Dash")) {
             currentMoveSpeed *= 2;
         }
 
         // go forward direction
-        if ((Input.GetKey(KeyCode.RightArrow) || (Input.GetKey(KeyCode.D))) && !stopRight) {
+        if (move > 0 && !stopRight && !selecting) {
             // turn around (if facing left, turn)
             if (!playerScript.FaceRight) {
                 playerScript.turn();
@@ -456,7 +471,7 @@ public class Path : MonoBehaviour
         }
 
         // go back direction (same as above but in reverse direction)
-        else if (Input.GetKey(KeyCode.LeftArrow) || (Input.GetKey(KeyCode.A)) && !stopLeft) {
+        else if (move < 0 && !stopLeft && !selecting) {
             Debug.Log("left");
             // turn around (if facing right, turn)
             if (playerScript.FaceRight) {
@@ -489,6 +504,67 @@ public class Path : MonoBehaviour
         else {
             playerScript.Stop();
         }
+
+        float dpadMove = Input.GetAxisRaw("Dpad");
+
+        if (dpadMove > 0.5 && !selecting && !down) {
+            selecting = true;
+            movingNode = CurrentNode + 1;
+            PathNode[movingNode].selected = true;
+            PathNode[movingNode].rend.enabled = true;
+            down = true;
+            Debug.Log("start forward");
+        }
+        else if (dpadMove < -0.5 && !selecting && !down) {
+            selecting = true;
+            movingNode = CurrentNode;
+            PathNode[movingNode].selected = true;
+            PathNode[movingNode].rend.enabled = true;
+            down = true;
+            Debug.Log("start back");
+        }
+        else if (dpadMove > 0.5 && selecting && !down) {
+            PathNode[movingNode].selected = false;
+            PathNode[movingNode].rend.enabled = false;
+            updateall();
+            movingNode++;
+            down = true;
+            if (movingNode >= PathNode.Length) {
+                movingNode = 0;
+            }
+            PathNode[movingNode].selected = true;
+            PathNode[movingNode].rend.enabled = true;
+            Debug.Log("forward");
+        }
+        else if (dpadMove < -0.5 && selecting && !down) {
+            PathNode[movingNode].selected = false;
+            PathNode[movingNode].rend.enabled = false;
+            updateall();
+            movingNode--;
+            down = true;
+            if (movingNode < 0) {
+                movingNode = PathNode.Length - 1;
+            }
+            PathNode[movingNode].selected = true;
+            PathNode[movingNode].rend.enabled = true;
+            Debug.Log("back");
+        }
+        else if (dpadMove == 0 && selecting) {
+            down = false;
+        }
+
     
+    
+    }
+    
+    void Update() {
+        if (Input.GetButtonDown("Return")) {
+            Debug.Log("return");
+            selecting = false;
+            PathNode[movingNode].selected = false;
+            PathNode[movingNode].rend.enabled = false;
+            updateall();
+        
+        }
     }
 }

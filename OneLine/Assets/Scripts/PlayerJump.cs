@@ -75,8 +75,9 @@ public class PlayerJump : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float drop = Input.GetAxis("Vertical");
         // vertical jump (player is between 45 and -45 degrees)
-        if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
+        if (playerscript.active && !pathscript.selecting && isGrounded && Input.GetButtonDown("Jump") && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
             // setting bool value for jumping and direction
             isGrounded = false;
             vertical = true;
@@ -118,7 +119,7 @@ public class PlayerJump : MonoBehaviour
             pathscript.stopRight = prevright;
         }
         // player is jumping left (player is between 45 and 135 degrees)
-        else if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z > 0.382 && transform.rotation.z < 0.707) {
+        else if (playerscript.active && !pathscript.selecting && isGrounded && Input.GetButtonDown("Jump") && transform.rotation.z > 0.382 && transform.rotation.z < 0.707) {
             // same as above
             isGrounded = false;
             myRb.isKinematic = false;  
@@ -149,7 +150,7 @@ public class PlayerJump : MonoBehaviour
             pathscript.stopRight = prevright;
         }
         // player is jumping right (player is between -45 and -135 degrees)
-        else if (playerscript.active && isGrounded && Input.GetKeyDown(KeyCode.Space) && transform.rotation.z < -0.382 && transform.rotation.z > -0.707) {
+        else if (playerscript.active && !pathscript.selecting && isGrounded && Input.GetButtonDown("Jump") && transform.rotation.z < -0.382 && transform.rotation.z > -0.707) {
             // same as above
             isGrounded = false;
             myRb.isKinematic = false;  
@@ -180,9 +181,9 @@ public class PlayerJump : MonoBehaviour
             pathscript.stopRight = prevright;
         }
         // player is dropping down (has to be at same angles as vertical jump)
-        else if (playerscript.active && isGrounded && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
+        else if (playerscript.active && !pathscript.selecting && isGrounded && drop < -0.5 && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
             // same as above, just drops
-            isGrounded = false;
+            isGrounded = false;  
             myRb.isKinematic = false;
             animatorif();
             animator.SetBool("Walk", false);
