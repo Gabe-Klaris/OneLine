@@ -142,13 +142,16 @@ public class Path : MonoBehaviour
             Vector3 normalizedAngle = rightFacingAngle.normalized;
             Vector3 rightDirection = Vector3.right;
             float dotRight = Vector3.Dot(normalizedAngle, rightDirection);
-            Debug.Log(rotation.z);
 
             if (rotation.z != 0 && dotRight >= 0) {
                 player.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
             }
             else if (rotation.z != 0 && dotRight < 0) {
                 player.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
+                Quaternion currentRotation = player.transform.rotation;
+                Quaternion rotation180 = new Quaternion(0, 0, 1, 0);
+                Quaternion newRotation = currentRotation * rotation180;
+                player.transform.rotation = newRotation;
             }
             // hard set for bug
             else if (rotation.z == 0 && rotation.x == 0) {
@@ -199,8 +202,20 @@ public class Path : MonoBehaviour
             // rotation
             Vector3 leftFacingAngle = startPosition - player.transform.position;
             Quaternion rotation = Quaternion.LookRotation(leftFacingAngle);
-            if (rotation.z != 0) {
+
+            Vector3 normalizedAngle = leftFacingAngle.normalized;
+            Vector3 leftDirection = Vector3.left;
+            float dotLeft = Vector3.Dot(normalizedAngle, leftDirection);
+
+            if (rotation.z != 0 && dotLeft >= 0) {
                 player.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
+            }
+            else if (rotation.z != 0 && dotLeft < 0) {
+                player.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
+                Quaternion currentRotation = player.transform.rotation;
+                Quaternion rotation180 = new Quaternion(0, 0, 1, 0);
+                Quaternion newRotation = currentRotation * rotation180;
+                player.transform.rotation = newRotation;
             }
             // hard set for bug
             else if (rotation.z == 0 && rotation.y == 0) {
