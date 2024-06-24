@@ -30,7 +30,7 @@ public class Path : MonoBehaviour
     // node moving from
     Vector3 startPosition;
     // node moving towards
-    private Vector3 CurrentPositionHolder;
+    private Vector3 currentPosition;
 
     // whether the player is stopped to the right
     public bool stopRight = false;
@@ -89,17 +89,23 @@ public class Path : MonoBehaviour
         gameHandlerScript = gameHandler.GetComponent<GameHandler>();
     }
 
-
-    // called when moving forward and hitting a new node
+    /* Called when moving forward (right) and hitting a new node */
     public void CheckNode() {
-        // if within array
+        /*
+              !!!DO NOT CHANGE!!! 
+        MOVEMENT WILL BREAK IF REMOVED 
+        */
+                  pos = 0;
+
+        /* Checks if player is within node array */
         if (CurrentNode < PathNode.Length - 1 && CurrentNode >= 0) {
-            pos = 0;
-            // current position is node moving towards
-            CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
-            // start position is node moving from
+            /* CurrentPosition is node in front (right) */
+            currentPosition = PathNode[CurrentNode + 1].transform.position;
+
+            /* StartPosition is node behind (left) */
             startPosition = PathNode[CurrentNode].transform.position;
-            // between two fire nodes
+
+            /* If between two fire nodes, sets player on fire */
             if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
                 playerScript.ice = false;
                 playerScript.onFire = true;
@@ -108,44 +114,43 @@ public class Path : MonoBehaviour
                     playerScript.runExplode = true;
                 }
             }
-            // going off a fire node
+
+            /* If leaving fire line, starts fire timer */
             else if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag != "Fire Node") {
                 playerScript.ice = false;
                 playerScript.onFire = false;
                 playerScript.fire = true;
                 playerScript.fireTimer = 2;
             }
-            // between two ice nodes
+
+            /* If between two ice nodes, sets player on ice */
             else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag == "Ice Node") {
                 playerScript.fire = false;
                 playerScript.onIce = true;
                 playerScript.ice = false;
 
             }
-            // going off an ice node
+            
+            /* If leaving ice line, starts ice timer */
             else if (PathNode[CurrentNode].tag == "Ice Node" && PathNode[CurrentNode + 1].tag != "Ice Node") {
                 playerScript.fire = false;
                 playerScript.onIce = false;
                 playerScript.ice = true;
                 playerScript.iceTimer = 2;
             }
-            // not on a fire or ice node
-            else {
-                playerScript.onFire = false;
-                playerScript.onIce = false;
-            }
 
-            // rotation of character
-            Vector3 rightFacingAngle = CurrentPositionHolder - player.transform.position;
-            Quaternion rotation = Quaternion.LookRotation(rightFacingAngle);
+            /* Rotates character to be perpendicular to line */
+            Vector3 facingAngle = currentPosition - player.transform.position;
+            Quaternion rotation = Quaternion.LookRotation(facingAngle);
 
-            Vector3 normalizedAngle = rightFacingAngle.normalized;
+            Vector3 normalizedAngle = facingAngle.normalized;
             Vector3 rightDirection = Vector3.right;
             float dotRight = Vector3.Dot(normalizedAngle, rightDirection);
 
             if (rotation.z != 0 && dotRight >= 0) {
                 player.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
             }
+            /* Flips player upside down if facing left while moving forwards */
             else if (rotation.z != 0 && dotRight < 0) {
                 player.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
                 Quaternion currentRotation = player.transform.rotation;
@@ -153,7 +158,7 @@ public class Path : MonoBehaviour
                 Quaternion newRotation = currentRotation * rotation180;
                 player.transform.rotation = newRotation;
             }
-            // hard set for bug
+            /* Hard check to catch bugs */
             else if (rotation.z == 0 && rotation.x == 0) {
                 player.transform.rotation = new Quaternion();
             }
@@ -165,11 +170,11 @@ public class Path : MonoBehaviour
         // if within array
         if (CurrentNode >= 0) {
             // current position is node moving towards (forward)
-            CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
+            currentPosition = PathNode[CurrentNode + 1].transform.position;
             // start position is node moving from (back)
             startPosition = PathNode[CurrentNode].transform.position;
             // position is total distance between nodes (at next node)
-            pos = Vector3.Distance(startPosition, CurrentPositionHolder);
+            pos = Vector3.Distance(startPosition, currentPosition);
             // same as check node but in reverse
             if (PathNode[CurrentNode].tag == "Fire Node" && PathNode[CurrentNode + 1].tag == "Fire Node") {
                 playerScript.ice = false;
@@ -199,11 +204,11 @@ public class Path : MonoBehaviour
                 playerScript.onFire = false;
             }
 
-            // rotation
-            Vector3 leftFacingAngle = startPosition - player.transform.position;
-            Quaternion rotation = Quaternion.LookRotation(leftFacingAngle);
+            /* Handles character rotation (CHARACTER SHOULD ONLY ROTATE AROUND Z AXIS) */
+            Vector3 facingAngle = startPosition - player.transform.position;
+            Quaternion rotation = Quaternion.LookRotation(facingAngle);
 
-            Vector3 normalizedAngle = leftFacingAngle.normalized;
+            Vector3 normalizedAngle = facingAngle.normalized;
             Vector3 leftDirection = Vector3.left;
             float dotLeft = Vector3.Dot(normalizedAngle, leftDirection);
 
@@ -217,11 +222,10 @@ public class Path : MonoBehaviour
                 Quaternion newRotation = currentRotation * rotation180;
                 player.transform.rotation = newRotation;
             }
-            // hard set for bug
+            /* Bug Checks */
             else if (rotation.z == 0 && rotation.y == 0) {
                 player.transform.rotation = new Quaternion(0, 0, -0.49531f, 0.50465f);
             }
-            // hard set for bug
             else if (rotation.z == 0 && rotation.x == 0) {
                 player.transform.rotation = new Quaternion();
             }
@@ -253,7 +257,7 @@ public class Path : MonoBehaviour
     // if node is dragged within radius of prev and post node, it moves to that position
     // if node is dragged outside radius of prev and post node, it moves to the edge of the radius
     public Vector3 checkMovement(Vector3 newPos, Node node) {
-        player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
+        player.transform.position = Vector3.MoveTowards(startPosition, currentPosition, pos);
         // searches for node in array
         int index = 0;
         for (int i = 0; i < PathNode.Length; i++) {
@@ -378,9 +382,9 @@ public class Path : MonoBehaviour
 
     // moves player to pos between start and end position
     void movePlayer() {
-        CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
+        currentPosition = PathNode[CurrentNode + 1].transform.position;
         startPosition = PathNode[CurrentNode].transform.position;
-        player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
+        player.transform.position = Vector3.MoveTowards(startPosition, currentPosition, pos);
     }
 
     // bug check for moing before first nodeS
@@ -404,7 +408,7 @@ public class Path : MonoBehaviour
         // setting position
         CheckNode();
         // moving player
-        playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+        playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
         // rotation
         CheckNode();
 
@@ -444,9 +448,9 @@ public class Path : MonoBehaviour
             // pos is always incrimented
             pos += currentMoveSpeed;
             // checks if not at next node
-            if (pos < Vector3.Distance(startPosition, CurrentPositionHolder)) {
+            if (pos < Vector3.Distance(startPosition, currentPosition)) {
                 // linear transform (goes to position pos between start and end position)
-                playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
                 // updates position
                 pos += currentMoveSpeed;
             } 
@@ -462,7 +466,7 @@ public class Path : MonoBehaviour
                     // updates position
                     pos += currentMoveSpeed;
                     // moves a bit more
-                    playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                    playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
                     // updates position
                     pos += currentMoveSpeed;
                 }
@@ -497,7 +501,7 @@ public class Path : MonoBehaviour
             pos -= currentMoveSpeed;
             // checks if not hit previous node
             if (pos > 0) {
-                playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
                 pos -= currentMoveSpeed;
             } 
             else {
@@ -508,7 +512,7 @@ public class Path : MonoBehaviour
                     CurrentNode--;
                     backNode();
                     pos -= currentMoveSpeed;
-                    playerScript.Move(Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos));
+                    playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
                     pos -= currentMoveSpeed;
                 }
             }
