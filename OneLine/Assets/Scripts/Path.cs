@@ -135,22 +135,28 @@ public class Path : MonoBehaviour
                 playerScript.onIce = false;
             }
 
+            // rotation of character
+            Vector3 rightFacingAngle = CurrentPositionHolder - player.transform.position;
+            Quaternion rotation = Quaternion.LookRotation(rightFacingAngle);
 
-            // rotation
-            Quaternion rotation = Quaternion.LookRotation(CurrentPositionHolder - player.transform.position, transform.TransformDirection(Vector3.up));
-            if (rotation.z != 0) {
-                player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w);
+            Vector3 normalizedAngle = rightFacingAngle.normalized;
+            Vector3 rightDirection = Vector3.right;
+            float dotRight = Vector3.Dot(normalizedAngle, rightDirection);
+            Debug.Log(rotation.z);
+
+            if (rotation.z != 0 && dotRight >= 0) {
+                player.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
+            }
+            else if (rotation.z != 0 && dotRight < 0) {
+                player.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
             }
             // hard set for bug
             else if (rotation.z == 0 && rotation.x == 0) {
                 player.transform.rotation = new Quaternion();
             }
-            else {
-            }
-
-
         }
     }
+
     // called when moving back and hitting a new node
     void backNode() {
         // if within array
@@ -191,22 +197,19 @@ public class Path : MonoBehaviour
             }
 
             // rotation
-            Quaternion rotation = Quaternion.LookRotation(startPosition - player.transform.position, transform.TransformDirection(Vector3.up));
+            Vector3 leftFacingAngle = startPosition - player.transform.position;
+            Quaternion rotation = Quaternion.LookRotation(leftFacingAngle);
             if (rotation.z != 0) {
-                player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w);
+                player.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
             }
             // hard set for bug
             else if (rotation.z == 0 && rotation.y == 0) {
-                player.transform.rotation = new Quaternion( 0 , 0 , -0.49531f , 0.50465f);
+                player.transform.rotation = new Quaternion(0, 0, -0.49531f, 0.50465f);
             }
             // hard set for bug
             else if (rotation.z == 0 && rotation.x == 0) {
                 player.transform.rotation = new Quaternion();
             }
-            /* Debug.Log(rotation); */
-            if (rotation.x == 0) {
-            }
-            
         }
     }
 
@@ -245,7 +248,6 @@ public class Path : MonoBehaviour
                 i = PathNode.Length;
             }
         }
-
 
         // if node is one of the nodes player is moving between
         if (index == CurrentNode || index == CurrentNode + 1) {
@@ -346,9 +348,7 @@ public class Path : MonoBehaviour
             else {
                 return node.transform.position;
             }
-
         }
-        
     }
 
     Vector3 OnePointNormalize(Vector3 dist) {
@@ -360,22 +360,21 @@ public class Path : MonoBehaviour
         Vector3 newPos = dist.normalized;
         return newPos * minRadius;
     }
+
     // moves player to pos between start and end position
     void movePlayer() {
         CurrentPositionHolder = PathNode[CurrentNode + 1].transform.position;
-        //Debug.Log(CurrentNode);
         startPosition = PathNode[CurrentNode].transform.position;
         player.transform.position = Vector3.MoveTowards(startPosition, CurrentPositionHolder, pos);
-
-        Quaternion rotation = Quaternion.LookRotation(CurrentPositionHolder - player.transform.position, transform.TransformDirection(Vector3.up));
-        player.transform.rotation = new Quaternion( 0 , 0 , rotation.z , rotation.w );
     }
+
     // bug check for moing before first nodeS
     public void cap() {
         if (CurrentNode == 0 && pos <= 0) {
             player.transform.position = PathNode[0].transform.position;
         }
     }
+
     // when player changes line, snaps player to node
     public void SnapPlayer(GameObject node) {
         // finds node in array
