@@ -7,9 +7,16 @@ using UnityEngine;
 // nodes should be in order you want to move in
 public class Path : MonoBehaviour
 {
-    // array of nodes
-    private Node [] PathNode;
-    // player object
+    /* The array of nodes the line is drawn across */
+    private Node[] PathNode;
+
+    /* The player object's script */
+    Player playerScript;
+
+    /* The current number node the player is at in the array */
+    int CurrentNode = 0;
+
+    /* The Player */
     public GameObject player;
 
     public GameObject levelCompleteMenuUI;
@@ -20,9 +27,6 @@ public class Path : MonoBehaviour
     int movingNode;
 
     bool down = false;
-
-    // index in array of current node
-    int CurrentNode = 0;
 
     // position between nodes
     float pos;
@@ -39,7 +43,6 @@ public class Path : MonoBehaviour
 
 
     // line renderer colors (not used)
-    public Color defaultColor = Color.black;
     public Color c1 = Color.yellow;
     public Color c2 = Color.red;
 
@@ -56,7 +59,7 @@ public class Path : MonoBehaviour
     // min distance between nodes
     float minRadius = 0.64f;
 
-    Player playerScript;
+    int lineSmoothness = 50;
 
     // Start is called before the first frame update
     void Start()
@@ -64,17 +67,16 @@ public class Path : MonoBehaviour
         // gets components
         PathNode = GetComponentsInChildren<Node>();
         playerScript = player.GetComponent<Player>();
-                                                       
+
         player.transform.position = PathNode[0].transform.position;
         CheckNode();
+
         // Code for setting line renderer for line view (copied from Unity Documentation)
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.widthMultiplier = 0.08f;
         lineRenderer.positionCount = PathNode.Length;
         lineRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-
-        /* SetupLineColors(); */
 
         // A simple 2 color gradient with a fixed alpha of 1.0f.
         float alpha = 1.0f;
@@ -232,14 +234,14 @@ public class Path : MonoBehaviour
         }
     }
 
-    // function for updating all nodes
-    // does it for cleaner line renderer
+    // function for updating all nodes; used for cleaner line render
     public void updateall() {
         for (int i = 0; i < PathNode.Length; i++) {
             Node node = PathNode[i].GetComponent<Node>();
             node.simulateDrag();
         }
     }
+
     public Vector3 MoveStick(Node node) {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
@@ -295,9 +297,11 @@ public class Path : MonoBehaviour
             else if (index == PathNode.Length -1) {
                 prevNode = PathNode[index - 1].transform.position;
             }
+
             // distance between mouse and node before dragged node
             float dist = Vector3.Distance(newPos, prevNode);
             Vector3 vdist = newPos - prevNode;
+
             // if in radius, move to mouse position (all good)
             if (dist < moveRadius && dist > minRadius) {
                 return newPos;
@@ -313,9 +317,9 @@ public class Path : MonoBehaviour
             // something went wrong
             else {
                 return node.transform.position;
-            
             }
         }
+
         // moving node between two nodes
         else {
             // node before and node after node being dragged
@@ -325,6 +329,7 @@ public class Path : MonoBehaviour
             // distance between mouse and nodes around it
             float posDist = Vector3.Distance(newPos, posNode);
             float prevDist = Vector3.Distance(newPos, prevNode);
+
             // if in radius of both nodes, move to mouse position (all good)
             if (prevDist < moveRadius && posDist < moveRadius && prevDist > minRadius && posDist > minRadius) {
                 return newPos;
@@ -353,7 +358,12 @@ public class Path : MonoBehaviour
                 Vector3 vdist = newPos - prevNode;
                 return prevNode + OnePointMinNormalize(vdist);
             }
-            // since all other cases have been checked, this is when outside of both radius
+
+            /* 
+            since all other cases have been checked, this is when outside of 
+                                    both radii
+            */
+
             // push to edge of radius of closest node
             else if (prevDist > posDist) {
                 Vector3 vdist = newPos - prevNode;
@@ -375,50 +385,58 @@ public class Path : MonoBehaviour
         return newPos * moveRadius;
     }
 
-    Vector3 OnePointMinNormalize(Vector3 dist) {
+    Vector3 OnePointMinNormalize(Vector3 dist) 
+    {
         Vector3 newPos = dist.normalized;
         return newPos * minRadius;
     }
 
     // moves player to pos between start and end position
-    void movePlayer() {
+    void movePlayer() 
+    {
         currentPosition = PathNode[CurrentNode + 1].transform.position;
         startPosition = PathNode[CurrentNode].transform.position;
         player.transform.position = Vector3.MoveTowards(startPosition, currentPosition, pos);
     }
 
     // bug check for moing before first nodeS
-    public void cap() {
+    public void cap() 
+    {
         if (CurrentNode == 0 && pos <= 0) {
             player.transform.position = PathNode[0].transform.position;
         }
     }
 
     // when player changes line, snaps player to node
-    public void SnapPlayer(GameObject node) {
+    public void SnapPlayer(GameObject node) 
+    {
         // finds node in array
         int index = 0;
+
         for (int i = 0; i < PathNode.Length; i++) {
             if (PathNode[i].transform.gameObject == node) {
                 index = i;
             }
         }
-        Debug.Log("Snappong");
         CurrentNode = index;
+
         // setting position
         CheckNode();
+
         // moving player
         playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
+
         // rotation
         CheckNode();
-
     }
 
-
-
-    // Draw Line between nodes
-    void DrawLine() {
+    // Draws the line between nodes
+    void DrawLine() 
+    {
         LineRenderer lineRenderer = GetComponent<LineRenderer>();
+        /* lineRenderer.positionCount = (PathNode.Length - 1) * lineSmoothness + 1; */
+        /* CreateCurve(); */
+
         var t = Time.time;
         for (int i = 0; i < PathNode.Length; i++)
         {
@@ -426,13 +444,46 @@ public class Path : MonoBehaviour
         }
     }
 
+    void CreateCurve()
+    {
+        Vector3[] points = new Vector3[lineRenderer.positionCount];
+        int index = 0;
+
+        for (int i = 0; i < PathNode.Length - 1; i++) {
+            Vector3 p0 = PathNode[Mathf.Max(i - 1, 0)].transform.position;
+            Vector3 p1 = PathNode[i].transform.position;
+            Vector3 p2 = PathNode[i + 1].transform.position;
+            Vector3 p3 = PathNode[Mathf.Min(i + 2, PathNode.Length - 1)].transform.position;
+
+            for (int j = 0; j < lineSmoothness; j++) {
+                float t = j / lineSmoothness;
+                points[index++] = CalculatePoint(t, p0, p1, p2, p3);
+            }
+        }
+
+        points[index] = PathNode[PathNode.Length - 1].transform.position;
+        lineRenderer.SetPositions(points);
+    }
+
+    Vector3 CalculatePoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        float t2 = t * t;
+        float t3 = t2 * t;
+
+        float b0 = 0.5f * (-t3 + 2f * t2 - t);
+        float b1 = 0.5f * (3f * t3 - 5f * t2 + 2f);
+        float b2 = 0.5f * (-3f * t2 + 4f * t2 + t);
+        float b3 = 0.5f * (t3 - t2);
+
+        return (b0 * p0) + (b1 * p1) + (b2 * p2) + (b3 * p3);
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        //Debug.Log(Vector3.Distance(PathNode[0].transform.position, PathNode[1].transform.position));
         float move = Input.GetAxisRaw("Horizontal");
-
         DrawLine();
+
         // dashing
         float currentMoveSpeed = MoveSpeed;
         if (Input.GetButton("Dash")) {
@@ -445,15 +496,18 @@ public class Path : MonoBehaviour
             if (!playerScript.FaceRight) {
                 playerScript.turn();
             }
+
             // pos is always incrimented
             pos += currentMoveSpeed;
+
             // checks if not at next node
             if (pos < Vector3.Distance(startPosition, currentPosition)) {
                 // linear transform (goes to position pos between start and end position)
                 playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
+
                 // updates position
                 pos += currentMoveSpeed;
-            } 
+            }
             else {
                 // here means hit next node
                 if (CurrentNode < PathNode.Length - 2 && CurrentNode >= 0) {
@@ -463,13 +517,17 @@ public class Path : MonoBehaviour
                     }
                     CurrentNode++;
                     CheckNode();
+
                     // updates position
                     pos += currentMoveSpeed;
+
                     // moves a bit more
                     playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
+
                     // updates position
                     pos += currentMoveSpeed;
                 }
+
                 // hit finish node of level
                 else if (CurrentNode == PathNode.Length - 2 && PathNode[CurrentNode + 1].tag == "Finish" && playerScript.active) {
                     Debug.Log(PathNode[CurrentNode].tag);
@@ -484,6 +542,7 @@ public class Path : MonoBehaviour
                     }
                 }
             }
+
             // removing offset put on at start
             pos -= currentMoveSpeed;
         }
@@ -518,6 +577,7 @@ public class Path : MonoBehaviour
             }
             pos += currentMoveSpeed;
         }
+
         // if not moving, stop player
         else {
             playerScript.Stop();
@@ -570,9 +630,6 @@ public class Path : MonoBehaviour
         else if (dpadMove == 0 && selecting) {
             down = false;
         }
-
-    
-    
     }
     
     void Update() {
@@ -582,7 +639,6 @@ public class Path : MonoBehaviour
             PathNode[movingNode].selected = false;
             PathNode[movingNode].rend.enabled = false;
             updateall();
-        
         }
     }
 }
