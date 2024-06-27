@@ -1231,8 +1231,20 @@ PrefabInstance:
       value: SetLevel
       objectReference: {fileID: 0}
     - target: {fileID: 440687935646677827, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 277.8278
+      objectReference: {fileID: 0}
+    - target: {fileID: 440687935646677827, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 55.5656
+      objectReference: {fileID: 0}
+    - target: {fileID: 440687935646677827, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -112.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 440687935646677827, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -182
+      value: -180.87
       objectReference: {fileID: 0}
     - target: {fileID: 794612313412300998, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1243,8 +1255,20 @@ PrefabInstance:
       value: RestartGame
       objectReference: {fileID: 0}
     - target: {fileID: 1192249407162852948, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 275.5497
+      objectReference: {fileID: 0}
+    - target: {fileID: 1192249407162852948, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 55.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1192249407162852948, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 110.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1192249407162852948, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -280
+      value: -181.1
       objectReference: {fileID: 0}
     - target: {fileID: 1208024649696809853, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1388,7 +1412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5571935716072196389, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 35
+      value: 6.2
       objectReference: {fileID: 0}
     - target: {fileID: 6223231106256616996, guid: be6bfad2077a1dd42b869995bb8ef575, type: 3}
       propertyPath: m_IsActive
@@ -8910,9 +8934,9 @@ MonoBehaviour:
   player: {fileID: 275884793}
   levelCompleteMenuUI: {fileID: 437840669}
   MoveSpeed: 0.1
+  selecting: 0
   stopRight: 0
   stopLeft: 0
-  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   c1: {r: 0, g: 0, b: 0, a: 1}
   c2: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1001 &1878671271
