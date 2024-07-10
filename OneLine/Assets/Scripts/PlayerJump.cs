@@ -181,7 +181,7 @@ public class PlayerJump : MonoBehaviour
             pathscript.stopRight = prevright;
         }
         // player is dropping down (has to be at same angles as vertical jump)
-        else if (playerscript.active && !pathscript.selecting && isGrounded && drop < -0.5 && transform.rotation.z > -0.382 && transform.rotation.z < 0.382) {
+        else if (playerscript.active && !pathscript.selecting && isGrounded && (drop < -0.5 || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))) {
             // same as above, just drops
             isGrounded = false;  
             myRb.isKinematic = false;
@@ -239,7 +239,6 @@ public class PlayerJump : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("hello");
         // if colliding with a node (or fire node) that is on a new line and the player is active and in a jump
         if ((other.gameObject.tag == "Node" || other.gameObject.tag == "Fire Node") && other.gameObject.transform.parent.gameObject != path && playerscript.active && !isGrounded) {
             Debug.Log(other.gameObject.transform.parent + " " + path);
@@ -247,6 +246,17 @@ public class PlayerJump : MonoBehaviour
             node = other.gameObject.GetComponent<Node>();
             otherpath = other.gameObject.transform.parent.GetComponent<Path>();
             otherplayer = otherpath.player.GetComponent<Player>();
+
+            // re setting dropping player to grounded
+            isGrounded = true;
+            myRb.velocity = Vector2.zero;
+            myRb.isKinematic = true;    
+            transform.position = new Vector3(overlord.transform.position.x, overlord.transform.position.y);  
+            down = false;
+            spritemask.SetActive(true); 
+            Debug.Log("I'm grounded");
+            pathscript.stopLeft = prevleft;
+            pathscript.stopRight = prevright;
 
             // hides current player and sets camera to new player
             playerscript.disappear();
@@ -309,12 +319,12 @@ public class PlayerJump : MonoBehaviour
             // same as player script
             // if hitting ice wall while on fire, melts wall
             // if hitting fire wall while on ice, destroys wall
-            if (wall.isIce && (playerscript.onFire || playerscript.fire) && playerscript.active) {
+            if (wall.isIce && (playerscript.onFire || playerscript.fire) && playerscript.active && (down || !isGrounded)) {
                 StartCoroutine(wall.melt());
                 //other.gameObject.SetActive(false);
             }
 
-            if (wall.isFire && (playerscript.onIce || playerscript.ice)) {
+            else if (wall.isFire && (playerscript.onIce || playerscript.ice)) {
                 other.gameObject.SetActive(false);
             }
         }

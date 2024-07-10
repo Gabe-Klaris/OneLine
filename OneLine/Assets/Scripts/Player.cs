@@ -280,7 +280,7 @@ public class Player : MonoBehaviour
             // if the wall is an ice wall
             // the player is on a fire line or has fire properties
             // and the play is the one currently active
-            if (wall.isIce && (onFire || fire) && active) {
+            if (wall.isIce && (onFire || fire) && active && !wall.melting) {
                 // melt the wall
                 StartCoroutine(wall.melt());
                 // unlock movement
@@ -293,7 +293,7 @@ public class Player : MonoBehaviour
             }
             // if player is on ice and hits fire wall
             // destory wall, unlock movement
-            if (wall.isFire && (onIce || ice) && active) {
+            else if (wall.isFire && (onIce || ice) && active) {
                 other.gameObject.SetActive(false);
                 if (FaceRight) {
                     pathFollower.stopRight = false;

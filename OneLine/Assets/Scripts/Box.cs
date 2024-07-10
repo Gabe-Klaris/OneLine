@@ -10,6 +10,8 @@ public class Box : MonoBehaviour
 
     public bool isFire = false;
 
+    public bool melting = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,8 +26,12 @@ public class Box : MonoBehaviour
     public IEnumerator melt() {
         Animator anim = GetComponent<Animator>();
         anim.SetTrigger("Melt");
+        Debug.Log("Melted Ice");
+        melting = true;
         yield return new WaitForSeconds(0.6f);
-        Destroy(gameObject);
+        if (gameObject != null) {
+            Destroy(gameObject);
+        }
     }
 
 }

@@ -418,16 +418,32 @@ public class Path : MonoBehaviour
                 index = i;
             }
         }
-        CurrentNode = index;
+        if (index <= PathNode.Length -2) {
+            CurrentNode = index;
 
-        // setting position
-        CheckNode();
+            // setting position
+            CheckNode();
 
-        // moving player
-        playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
+            // moving player
+            Debug.Log("snap");
+            playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
 
-        // rotation
-        CheckNode();
+            // rotation
+            CheckNode();
+        }
+        else {
+            Debug.Log("last node");
+            CurrentNode = index - 1;
+
+            // setting position
+            backNode();
+
+            // moving player
+            playerScript.Move(Vector3.MoveTowards(startPosition, currentPosition, pos));
+
+            // rotation
+            backNode();
+        }
     }
 
     // Draws the line between nodes
@@ -512,8 +528,6 @@ public class Path : MonoBehaviour
                 // here means hit next node
                 if (CurrentNode < PathNode.Length - 2 && CurrentNode >= 0) {
                     if (playerScript.active) {
-                        Debug.Log("next " + CurrentNode);
-                        Debug.Log(PathNode.Length);
                     }
                     CurrentNode++;
                     CheckNode();
@@ -549,7 +563,6 @@ public class Path : MonoBehaviour
 
         // go back direction (same as above but in reverse direction)
         else if (move < 0 && !stopLeft && !selecting) {
-            Debug.Log("left");
             // turn around (if facing right, turn)
             if (playerScript.FaceRight) {
                 playerScript.turn();
@@ -585,7 +598,7 @@ public class Path : MonoBehaviour
 
         float dpadMove = Input.GetAxisRaw("Dpad");
 
-        if (dpadMove > 0.5 && !selecting && !down) {
+        if (dpadMove > 0.5 && !selecting && !down && playerScript.active) {
             selecting = true;
             movingNode = CurrentNode + 1;
             PathNode[movingNode].selected = true;
@@ -593,7 +606,7 @@ public class Path : MonoBehaviour
             down = true;
             Debug.Log("start forward");
         }
-        else if (dpadMove < -0.5 && !selecting && !down) {
+        else if (dpadMove < -0.5 && !selecting && !down && playerScript.active) {
             selecting = true;
             movingNode = CurrentNode;
             PathNode[movingNode].selected = true;
@@ -601,7 +614,7 @@ public class Path : MonoBehaviour
             down = true;
             Debug.Log("start back");
         }
-        else if (dpadMove > 0.5 && selecting && !down) {
+        else if (dpadMove > 0.5 && selecting && !down && playerScript.active) {
             PathNode[movingNode].selected = false;
             PathNode[movingNode].rend.enabled = false;
             updateall();
@@ -614,7 +627,7 @@ public class Path : MonoBehaviour
             PathNode[movingNode].rend.enabled = true;
             Debug.Log("forward");
         }
-        else if (dpadMove < -0.5 && selecting && !down) {
+        else if (dpadMove < -0.5 && selecting && !down && playerScript.active) {
             PathNode[movingNode].selected = false;
             PathNode[movingNode].rend.enabled = false;
             updateall();
