@@ -97,7 +97,7 @@ public class PlayerJump : MonoBehaviour
             // storing stop values
             prevleft = pathscript.stopLeft;
             prevright = pathscript.stopRight;
-            // making player stop no no motion while jumping
+            // making player stop; no motion while jumping
             pathscript.stopLeft = true;
             pathscript.stopRight = true;
         }
